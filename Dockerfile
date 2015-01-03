@@ -1,12 +1,10 @@
-FROM ubuntu:14.04
+FROM debian:wheezy
 
 # upgrade
-RUN apt-get update
-RUN apt-get upgrade -y
-
-# needed packages
-RUN apt-get install -y --no-install-recommends python-pip curl nginx-core
-RUN pip install envtpl
+RUN apt-get update && \
+    apt-get upgrade -y && \
+    apt-get install -y --no-install-recommends python-pip curl nginx-light && \
+    pip install envtpl
 
 # nginx
 ADD nginx.conf.tpl /etc/nginx/nginx.conf.tpl
