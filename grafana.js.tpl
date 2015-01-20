@@ -8,22 +8,14 @@ define(['settings'], function(Settings) {
             {% if GRAFANA_GRAPHITE_SERVERS is defined %}
             graphite: {
                 type: 'graphite',
-                {% if GRAFANA_SSL_CERT is defined %}
-                url: 'https://{{ GRAFANA_SERVER_NAME }}/graphite',
-                {% else %}
-                url: 'http://{{ GRAFANA_SERVER_NAME }}/graphite',
-                {% endif %}
+                url: '/graphite',
             },
             {% endif %}
 
             {% if GRAFANA_ES_SERVERS is defined %}
             elasticsearch: {
                 type: 'elasticsearch',
-                {% if GRAFANA_SSL_CERT is defined %}
-                url: 'https://{{ GRAFANA_SERVER_NAME }}/es',
-                {% else %}
-                url: 'http://{{ GRAFANA_SERVER_NAME }}/es',
-                {% endif %}
+                url: '/es',
                 index: '{{ GRAFANA_ES_INDEX | default("grafana-dash") }}',
                 grafanaDB: true,
             },
