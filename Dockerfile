@@ -1,27 +1,33 @@
-FROM debian:wheezy
+FROM dockerfile/nodejs
 
-# upgrade
-RUN apt-get update && \
-    apt-get upgrade -y && \
-    apt-get install -y --no-install-recommends python-pip curl nginx-light && \
-    pip install envtpl
+RUN curl -SL https://storage.googleapis.com/golang/go1.4.linux-amd64.tar.gz \
+    | tar -xzC /usr/local
 
-# nginx
-ADD nginx.conf.tpl /etc/nginx/nginx.conf.tpl
+ENV GOPATH /go
+ENV PATH $PATH:/usr/local/go/bin:$GOPATH/bin
 
-# grafana
-ENV GRAFANA_VERSION 1.8.1
-RUN curl -s "http://grafanarel.s3.amazonaws.com/grafana-${GRAFANA_VERSION}.tar.gz" | \
-    tar xz -C /tmp && mv "/tmp/grafana-${GRAFANA_VERSION}" /grafana
-ADD grafana.js.tpl /grafana/config.js.tpl
 
-# run script
-ADD ./run.sh ./run.sh
+ENV GF_REPO_URL https://github.com/grafana/grafana.git
+ENV GF_GO_PATH /go/src/github.com/grafana/grafana
 
-# logs
-VOLUME ["/var/log/nginx"]
+RUN apt-get -y update
+RUN apt-get -y install libfontconfig
 
-# ports
-EXPOSE 80 443
+RUN   mkdir -p /go/src/github.com/grafana             &&\
+      git clone -b develop $GF_REPO_URL $GF_GO_PATH   &&\
+      cd $GF_GO_PATH                                  &&\
+      go run build.go setup                           &&\
+      go run build.go build                           &&\
+      npm install                        &&\
+      npm install -g grunt-cli           &&\
+      grunt release                      &&\
+      mkdir -p /opt/grafana              &&\
+      cd tmp                             &&\
+      cp -r * /opt/grafana
 
-ENTRYPOINT ["/run.sh"]
+EXPOSE 3000
+
+VOLUME ["/opt/grafana/data"]
+
+WORKDIR /opt/grafana
+ENTRYPOINT ["/opt/grafana/grafana", "web"]
