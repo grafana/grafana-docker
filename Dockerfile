@@ -1,33 +1,16 @@
-FROM dockerfile/nodejs
+FROM debian:wheezy
 
-RUN curl -SL https://storage.googleapis.com/golang/go1.4.linux-amd64.tar.gz \
-    | tar -xzC /usr/local
+RUN apt-get update && apt-get -y install libfontconfig wget
 
-ENV GOPATH /go
-ENV PATH $PATH:/usr/local/go/bin:$GOPATH/bin
+RUN wget http://grafanarel.s3.amazonaws.com/builds/grafana_latest_amd64.deb
 
-
-ENV GF_REPO_URL https://github.com/grafana/grafana.git
-ENV GF_GO_PATH /go/src/github.com/grafana/grafana
-
-RUN apt-get -y update
-RUN apt-get -y install libfontconfig
-
-RUN   mkdir -p /go/src/github.com/grafana             &&\
-      git clone -b develop $GF_REPO_URL $GF_GO_PATH   &&\
-      cd $GF_GO_PATH                                  &&\
-      go run build.go setup                           &&\
-      go run build.go build                           &&\
-      npm install                        &&\
-      npm install -g grunt-cli           &&\
-      grunt release                      &&\
-      mkdir -p /opt/grafana              &&\
-      cd tmp                             &&\
-      cp -r * /opt/grafana
+RUN dpkg -i grafana_latest_amd64.deb
 
 EXPOSE 3000
 
-VOLUME ["/opt/grafana/data"]
+VOLUME ["/opt/data"]
+VOLUME ["/etc/grafana"]
 
-WORKDIR /opt/grafana
-ENTRYPOINT ["/opt/grafana/grafana", "web"]
+WORKDIR /opt/grafana/current
+
+ENTRYPOINT ["/opt/grafana/current/grafana", "--config", "/etc/grafana/grafana.ini", "web"]
