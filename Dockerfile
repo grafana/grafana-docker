@@ -1,6 +1,6 @@
 FROM debian:wheezy
 
-RUN apt-get update && apt-get -y install libfontconfig wget
+RUN apt-get update && apt-get -y install libfontconfig wget adduser
 
 RUN wget http://grafanarel.s3.amazonaws.com/builds/grafana_latest_amd64.deb
 
@@ -8,9 +8,10 @@ RUN dpkg -i grafana_latest_amd64.deb
 
 EXPOSE 3000
 
-VOLUME ["/opt/data"]
+VOLUME ["/var/lib/grafana"]
+VOLUME ["/var/log/grafana"]
 VOLUME ["/etc/grafana"]
 
-WORKDIR /opt/grafana/current
+WORKDIR /usr/share/grafana
 
-ENTRYPOINT ["/opt/grafana/current/grafana", "--config", "/etc/grafana/grafana.ini", "web"]
+ENTRYPOINT ["/usr/sbin/grafana-server", "--config", "/etc/grafana/grafana.ini"]
