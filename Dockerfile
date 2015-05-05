@@ -1,4 +1,4 @@
-FROM debian:wheezy
+FROM socrata/base
 
 RUN apt-get update && apt-get -y install libfontconfig wget adduser openssl ca-certificates
 
