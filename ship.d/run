@@ -1,0 +1,8 @@
+#!/bin/sh
+
+# grafana-db-pw.sh must have lines like the following:
+#   GF_DATABASE_USER=abc
+#   GF_DATABASE_PASSWORD=def123
+. /dev/shm/grafana-db-pw.sh
+
+exec su socrata -c "/usr/sbin/grafana-server --config /etc/grafana/grafana.ini"
