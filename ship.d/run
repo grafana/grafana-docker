@@ -5,4 +5,4 @@
 #   GF_DATABASE_PASSWORD=def123
 . /dev/shm/grafana-db-pw.sh
 
-exec /usr/sbin/grafana-server --config /etc/grafana/grafana.ini
+exec su socrata -c "/usr/sbin/grafana-server --config /etc/grafana/grafana.ini"
