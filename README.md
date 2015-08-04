@@ -1,6 +1,7 @@
 # Grafana docker image
 
-This container currently only contains the Grafana 2.0.0-beta1.
+This container builds a container with the
+latest master build of Grafana.
 
 ## Running your Grafana image
 --------------------------
