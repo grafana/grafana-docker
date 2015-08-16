@@ -1,6 +1,6 @@
 FROM debian:wheezy
 
-RUN apt-get update && apt-get -y install libfontconfig wget adduser openssl ca-certificates
+RUN apt-get update && apt-get -y install libfontconfig wget adduser openssl ca-certificates && apt-get clean
 
 RUN wget http://grafanarel.s3.amazonaws.com/builds/grafana_latest_amd64.deb
 
