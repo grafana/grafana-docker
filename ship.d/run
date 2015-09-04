@@ -5,4 +5,12 @@
 #   GF_DATABASE_PASSWORD=def123
 . /dev/shm/grafana-db-pw.sh
 
+/bin/env_parse etc/graphite-datasource.conf.j2
+
 exec su socrata -c "/usr/sbin/grafana-server --config /etc/grafana/grafana.ini"
+
+curl --user admin:admin \
+  -X POST \
+  -H 'Content-Type: application/json;charset=UTF-8' \
+  --data-binary @/etc/graphite-datasource.json \
+  http://localhost:3000/api/datasources'

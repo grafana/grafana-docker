@@ -10,10 +10,11 @@ Run:
 
 ## Running the image
 
-To run the image with its default settings,
+The docker image is configured to set up a graphite datasource
+when run.  You must specify at minimum a graphite host.
 
 Run:
-  `docker run -i -p 3000:3000 grafana`
+  `docker run -i -p 3000:3000 -e "GRAPHITE_HOST=<graphite_host>" grafana`
 
 
 To run the image with custom settings, you'll likely want to consult
@@ -26,7 +27,8 @@ For example, to use a postgres database,
 Run:
 
   ```
-  echo 'GF_DATABASE_TYPE=postgres' >> envfile
+  echo 'GRAPHITE_HOST=<graphite_host>' >> envfile
+  echo 'GF_DATABASE_TYPE=postgres' > envfile
   echo 'GF_DATABASE_HOST=<pg_host>' > envfile
   echo 'GF_DATABASE_USER=<pg_user>' > envfile
   echo 'GF_DATABASE_PASSWORD=<pg_pass>' > envfile

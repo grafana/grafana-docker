@@ -7,6 +7,7 @@ RUN wget http://grafanarel.s3.amazonaws.com/builds/grafana_latest_amd64.deb
 RUN dpkg -i grafana_latest_amd64.deb
 
 ADD ship.d /etc/ship.d
+COPY graphite-datasource.json.j2 /etc/
 
 EXPOSE 3000
 
