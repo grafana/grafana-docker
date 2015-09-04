@@ -11,4 +11,4 @@ CMD="/usr/sbin/grafana-server \
   cfg:default.paths.logs=/var/log/grafana
 "
 
-exec su socrata -c "$CMD"
+exec su grafana -c "$CMD"
