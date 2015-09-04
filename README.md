@@ -1,27 +1,34 @@
 # Grafana docker image
 
-This container currently only contains the Grafana 2.0.0-beta1.
+This container runs Grafana 2.1.0.
 
-## Running your Grafana image
---------------------------
+## Building the image
 
-Start your image binding the external port `3000`.
-
-   docker run -i -p 3000:3000 grafana/grafana
-
-Try it out, default admin user is admin/admin.
+Run:
+  `docker build --rm -t grafana .`
 
 
-## Configuring your Grafana container
+## Running the image
 
-All options defined in conf/grafana.ini can be overriden using environment variables, for example:
+To run the image with its default settings,
 
-```
-docker run -i -p 3000:3000 \
-  -e "GF_SERVER_ROOT_URL=http://grafana.server.name"  \
-  -e "GF_SECURITY_ADMIN_PASSWORD=secret  \
-  grafana/grafana
-```
+Run:
+  `docker run -i -p 3000:3000 grafana`
 
 
+To run the image with custom settings, you'll likely want to consult
+http://docs.grafana.org/installation/configuration/. In particular
+note that all configuration going into the ini files can be overriden
+using environment variables.
 
+For example, to use a postgres database,
+
+Run:
+
+  ```
+  echo 'GF_DATABASE_TYPE=postgres' >> envfile
+  echo 'GF_DATABASE_HOST=<pg_host>' > envfile
+  echo 'GF_DATABASE_USER=<pg_user>' > envfile
+  echo 'GF_DATABASE_PASSWORD=<pg_pass>' > envfile
+  docker run --env-file=envfile -p 3000:3000 -d grafana
+  ```
