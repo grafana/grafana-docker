@@ -14,3 +14,5 @@ EXPOSE 3000
 VOLUME ["/var/lib/grafana"]
 VOLUME ["/var/log/grafana"]
 VOLUME ["/etc/grafana"]
+
+WORKDIR /usr/share/grafana
