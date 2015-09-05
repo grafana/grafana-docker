@@ -11,4 +11,4 @@ CMD="/usr/sbin/grafana-server \
   cfg:default.paths.logs=/var/log/grafana
 "
 
-exec su grafana -c "$CMD"
+sudo -E -u grafana $CMD
