@@ -1,8 +1,8 @@
 #!/bin/sh
 
 # grafana-db-pw.sh must have lines like the following:
-#   GF_DATABASE_USER=abc
-#   GF_DATABASE_PASSWORD=def123
+#   export GF_DATABASE_USER=abc
+#   export GF_DATABASE_PASSWORD=def123
 . /dev/shm/grafana-db-pw.sh
 
 CMD="/usr/sbin/grafana-server \
