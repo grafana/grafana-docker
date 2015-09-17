@@ -1,10 +1,20 @@
-FROM debian:wheezy
 
-RUN apt-get update && apt-get -y install libfontconfig wget adduser openssl ca-certificates && apt-get clean
+FROM debian:jessie
 
-RUN wget http://grafanarel.s3.amazonaws.com/builds/grafana_latest_amd64.deb
+RUN apt-get -y update && \
+	apt-get -y install \
+	wget \
+	libfontconfig \
+	adduser
 
-RUN dpkg -i grafana_latest_amd64.deb
+RUN wget http://grafanarel.s3.amazonaws.com/builds/grafana_latest_amd64.deb && \
+	dpkg -i grafana_latest_amd64.deb
+
+RUN rm -rf grafana_latest_amd64.deb && \
+	apt-get -y remove wget && \
+	apt-get -y --purge autoremove && \
+	apt-get -y clean && \
+	rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 EXPOSE 3000
 
