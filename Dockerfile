@@ -3,11 +3,14 @@ FROM debian:jessie
 ENV GRAFANA_VERSION 2.1.3
 
 RUN apt-get update && \
-    apt-get -y install libfontconfig wget adduser openssl ca-certificates && \
+    apt-get -y --no-install-recommends install libfontconfig curl ca-certificates && \
     apt-get clean && \
-    wget https://grafanarel.s3.amazonaws.com/builds/grafana_${GRAFANA_VERSION}_amd64.deb -O /tmp/grafana.deb && \
+    curl https://grafanarel.s3.amazonaws.com/builds/grafana_${GRAFANA_VERSION}_amd64.deb > /tmp/grafana.deb && \
     dpkg -i /tmp/grafana.deb && \
-    rm /tmp/grafana.deb
+    rm /tmp/grafana.deb && \
+    apt-get remove -y curl && \
+    apt-get autoremove -y && \
+    rm -rf /var/lib/apt/lists/*
 
 VOLUME ["/var/lib/grafana", "/var/log/grafana", "/etc/grafana"]
 
