@@ -1,17 +1,16 @@
-FROM debian:wheezy
+FROM debian:jessie
 
-RUN apt-get update && apt-get -y install libfontconfig wget adduser openssl ca-certificates && apt-get clean
+ENV GRAFANA_VERSION 2.1.3
 
-RUN wget http://grafanarel.s3.amazonaws.com/builds/grafana_latest_amd64.deb
+RUN apt-get update && \
+    apt-get -y install libfontconfig wget adduser openssl ca-certificates && \
+    apt-get clean && \
+    wget https://grafanarel.s3.amazonaws.com/builds/grafana_${GRAFANA_VERSION}_amd64.deb -O /tmp/grafana.deb && \
+    dpkg -i /tmp/grafana.deb && \
+    rm /tmp/grafana.deb
 
-RUN dpkg -i grafana_latest_amd64.deb
+VOLUME ["/var/lib/grafana", "/var/log/grafana", "/etc/grafana"]
 
 EXPOSE 3000
 
-VOLUME ["/var/lib/grafana"]
-VOLUME ["/var/log/grafana"]
-VOLUME ["/etc/grafana"]
-
-WORKDIR /usr/share/grafana
-
-ENTRYPOINT ["/usr/sbin/grafana-server", "--config=/etc/grafana/grafana.ini", "cfg:default.paths.data=/var/lib/grafana", "cfg:default.paths.logs=/var/log/grafana"]
+ENTRYPOINT ["/usr/sbin/grafana-server", "--homepath=/usr/share/grafana", "--config=/etc/grafana/grafana.ini", "cfg:default.paths.data=/var/lib/grafana", "cfg:default.paths.logs=/var/log/grafana"]
