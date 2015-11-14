@@ -3,9 +3,10 @@
 # grafana-db-pw.sh must have lines like the following:
 #   export GF_DATABASE_USER=abc
 #   export GF_DATABASE_PASSWORD=def123
-. /dev/shm/grafana-db-pw.sh
+[ -x /dev/shm/grafana-db-pw.sh ] && . /dev/shm/grafana-db-pw.sh
 
 CMD="/usr/sbin/grafana-server \
+  --homepath=/usr/share/grafana \
   --config=/etc/grafana/grafana.ini \
   cfg:default.paths.data=/var/lib/grafana \
   cfg:default.paths.logs=/var/log/grafana
