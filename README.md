@@ -17,7 +17,7 @@ Start your image binding the external port `3000`.
 
    docker run -i -p 3000:3000 grafana/grafana
 
-Try it out, default admin user is admin/admin.
+Try it out, default admin user is admin/secret.
 
 
 ## Configuring your Grafana container
