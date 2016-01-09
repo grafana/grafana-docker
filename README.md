@@ -29,8 +29,8 @@ variables, for example:
 ```
 docker run \
   -d \
-  --name=grafana \
   -p 3000:3000 \
+  --name=grafana \
   -e "GF_SERVER_ROOT_URL=http://grafana.server.name" \
   -e "GF_SECURITY_ADMIN_PASSWORD=secret" \
   grafana/grafana
@@ -45,8 +45,8 @@ docker run -d -v /var/lib/grafana --name grafana-storage busybox:latest
 # start grafana
 docker run \
   -d \
-  --name=grafana \
   -p 3000:3000 \
+  --name=grafana \
   --volumes-from grafana-storage \
   grafana/grafana
 ```
@@ -57,7 +57,6 @@ docker run \
 # specify right tag, e.g. 2.6.0 - see Docker Hub for available tags
 docker run \
   -d \
-  --name=grafana \
   -p 3000:3000 \
   --name grafana \
   grafana/grafana:2.6.0
