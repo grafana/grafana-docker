@@ -51,7 +51,7 @@ docker run \
   grafana/grafana
 ```
 
-## Start specific version of Grafana XXL
+## Running specific version of Grafana
 
 ```
 # specify right tag, e.g. 2.6.0 - see Docker Hub for available tags
