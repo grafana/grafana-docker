@@ -1,0 +1,23 @@
+machine:
+  python:
+    version: 2.7.3
+  services:
+    - docker
+
+dependencies:
+  cache_directories:
+    - "~/docker"
+
+  pre:
+    - ./build.sh
+
+test:
+  override:
+     - echo "test"
+
+deployment:
+  develop:
+    branch: circleci_test
+    owner: grafana
+    commands:
+      - echo "deploy"
