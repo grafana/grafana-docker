@@ -9,7 +9,13 @@ dependencies:
     - "~/docker"
 
   pre:
-    - ./build.sh
+    - docker info
+    - > 
+      if [ -n "${CREATE_MASTER_IMAGE}" ]; then
+        ./build.sh latest master
+      else
+        ./build.sh
+      fi
 
 test:
   override:
@@ -20,4 +26,10 @@ deployment:
     branch: circleci_test
     owner: grafana
     commands:
-      - echo "deploy"
+      - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
+      - >
+        if [ -n "${CREATE_MASTER_IMAGE}" ]; then
+          ./push_to_docker_hub.sh master
+        else
+          ./push_to_docker_hub.sh
+        fi

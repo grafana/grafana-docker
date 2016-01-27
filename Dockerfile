@@ -1,6 +1,6 @@
 FROM debian:jessie
 
-ENV GRAFANA_VERSION 2.6.0
+ARG GRAFANA_VERSION
 
 RUN apt-get update && \
     apt-get -y --no-install-recommends install libfontconfig curl ca-certificates && \
