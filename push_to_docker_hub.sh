@@ -4,7 +4,6 @@ if [ -z "${_grafana_tag}" ]; then
 	source GRAFANA_VERSION
 	_grafana_tag=$GRAFANA_VERSION
 	docker push grafana/grafana:${_grafana_tag}
-	docker tag grafana/grafana:latest
 	docker push grafana/grafana:latest
 else
 	docker push grafana/grafana:${_grafana_tag}
