@@ -4,6 +4,7 @@
 : "${GF_PATHS_LOGS:=/var/log/grafana}"
 
 chown -R grafana:grafana "$GF_PATHS_DATA" "$GF_PATHS_LOGS"
+chown -R grafana:grafana /etc/grafana
 
 exec gosu grafana /usr/sbin/grafana-server  \
   --homepath=/usr/share/grafana             \
