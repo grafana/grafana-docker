@@ -21,4 +21,3 @@ docker build --build-arg GRAFANA_VERSION=${_grafana_version} --tag "grafana/graf
 if [ $_release_build == true ]; then
 	docker build --build-arg GRAFANA_VERSION=${_grafana_version} --tag "grafana/grafana:latest"  --no-cache=true .
 fi
->>>>>>> fbdf0901f2396ad13eee8ca07e3387453922c572
