@@ -53,6 +53,29 @@ docker run \
   grafana/grafana:2.6.0
 ```
 
+## Configuring AWS credentials for CloudWatch support
+
+```
+docker run \
+  -d \
+  -p 3000:3000 \
+  --name=grafana \
+  -e "GF_AWS_PROFILES=default" \
+  -e "GF_AWS_default_ACCESS_KEY_ID=YOUR_ACCESS_KEY" \
+  -e "GF_AWS_default_SECRET_ACCESS_KEY=YOUR_SECRET_KEY" \
+  -e "GF_AWS_default_REGION=us-east-1" \
+  grafana/grafana
+```
+
+You may also specify multiple profiles to `GF_AWS_PROFILES` (e.g.
+`GF_AWS_PROFILES=default another`).
+
+Supported variables:
+
+- `GF_AWS_${profile}_ACCESS_KEY_ID`: AWS access key ID (required).
+- `GF_AWS_${profile}_SECRET_ACCESS_KEY`: AWS secret access  key (required).
+- `GF_AWS_${profile}_REGION`: AWS region (optional).
+
 ## Official Grafana with unofficial plugins (community project):
 
 Unofficial plugins/datasources: Zabbix, DalmatinerDB, Ambari, Atsd, Bosun,
