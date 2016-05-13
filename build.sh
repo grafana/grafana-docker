@@ -3,8 +3,6 @@ _grafana_version=$1
 _grafana_tag=$2
 _release_build=false
 
-docker build --tag "grafana/grafana:3.0.1"  --no-cache=true .
-
 if [ -z "${_grafana_version}" ]; then
 	source GRAFANA_VERSION
 	_grafana_version=$GRAFANA_VERSION
