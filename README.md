@@ -42,6 +42,19 @@ docker run \
   grafana/grafana
 ```
 
+## Installing plugins for Grafana 3
+
+Pass the plugins you want installed to docker with the `GF_INSTALL_PLUGINS` environment variable as a comma seperated list. This will pass each plugin name to `grafana-cli plugins install ${plugin}`.
+
+```
+docker run \
+  -d \
+  -p 3000:3000 \
+  --name=grafana \
+  -e "GF_INSTALL_PLUGINS=grafana-clock-panel,grafana-simple-json-datasource" \
+  grafana/grafana
+```
+
 ## Running specific version of Grafana
 
 ```
