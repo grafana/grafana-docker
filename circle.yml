@@ -1,0 +1,38 @@
+machine:
+  pre:
+    - sudo curl -L -o /usr/bin/docker 'https://s3-external-1.amazonaws.com/circle-downloads/docker-1.9.0-circleci'
+    - sudo chmod 0755 /usr/bin/docker
+  python:
+    version: 2.7.3
+  services:
+    - docker
+
+dependencies:
+  cache_directories:
+    - "~/docker"
+
+  pre:
+    - docker info
+    - > 
+      if [ -n "${CREATE_MASTER_IMAGE}" ]; then
+        ./build.sh latest master
+      else
+        ./build.sh
+      fi
+
+test:
+  override:
+     - echo "test"
+
+deployment:
+  develop:
+    branch: master
+    owner: grafana
+    commands:
+      - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
+      - >
+        if [ -n "${CREATE_MASTER_IMAGE}" ]; then
+          ./push_to_docker_hub.sh master
+        else
+          ./push_to_docker_hub.sh
+        fi
