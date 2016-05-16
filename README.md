@@ -96,3 +96,4 @@ docker run \
 
 Visit [Grafana XXL project](https://github.com/monitoringartist/grafana-xxl)
 for more details.
+
