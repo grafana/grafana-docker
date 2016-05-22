@@ -7,6 +7,11 @@
 chown -R grafana:grafana "$GF_PATHS_DATA" "$GF_PATHS_LOGS"
 chown -R grafana:grafana /etc/grafana
 
+if [ ! -d /opt/grafana ] ; then
+    mkdir /opt/grafana
+fi
+chown grafana:grafana /opt/grafana/
+
 if [ ! -z ${GF_AWS_PROFILES+x} ]; then
     mkdir -p ~grafana/.aws/
     touch ~grafana/.aws/credentials
