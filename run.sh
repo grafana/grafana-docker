@@ -30,6 +30,15 @@ if [ ! -z ${GF_AWS_PROFILES+x} ]; then
     chmod 600 ~grafana/.aws/credentials
 fi
 
+if [ ! -z ${GF_INSTALL_PLUGINS} ]; then
+  OLDIFS=$IFS
+  IFS=','
+  for plugin in ${GF_INSTALL_PLUGINS}; do
+    grafana-cli plugins install ${plugin}
+  done
+  IFS=$OLDIFS
+fi
+
 exec gosu grafana /usr/sbin/grafana-server  \
   --homepath=/usr/share/grafana             \
   --config=/etc/grafana/grafana.ini         \
