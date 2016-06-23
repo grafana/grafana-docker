@@ -42,6 +42,19 @@ docker run \
   grafana/grafana
 ```
 
+## Installing plugins for Grafana 3
+
+Pass the plugins you want installed to docker with the `GF_INSTALL_PLUGINS` environment variable as a comma seperated list. This will pass each plugin name to `grafana-cli plugins install ${plugin}`.
+
+```
+docker run \
+  -d \
+  -p 3000:3000 \
+  --name=grafana \
+  -e "GF_INSTALL_PLUGINS=grafana-clock-panel,grafana-simple-json-datasource" \
+  grafana/grafana
+```
+
 ## Running specific version of Grafana
 
 ```
@@ -53,23 +66,25 @@ docker run \
   grafana/grafana:2.6.0
 ```
 
-## Official Grafana with unofficial plugins (community project):
-
-Unofficial plugins/datasources: Zabbix, DalmatinerDB, Ambari, Atsd, Bosun,
-Cloudera Manager, Druid, Chnocchi, PRTG, ...
+## Configuring AWS credentials for CloudWatch support
 
 ```
-# create /var/lib/grafana as persistent volume storage
-docker run -d -v /var/lib/grafana --name grafana-xxl-storage busybox:latest
-
-# start grafana-xxl
 docker run \
   -d \
   -p 3000:3000 \
-  --name grafana-xxl \
-  --volumes-from grafana-xxl-storage \
-  monitoringartist/grafana-xxl
+  --name=grafana \
+  -e "GF_AWS_PROFILES=default" \
+  -e "GF_AWS_default_ACCESS_KEY_ID=YOUR_ACCESS_KEY" \
+  -e "GF_AWS_default_SECRET_ACCESS_KEY=YOUR_SECRET_KEY" \
+  -e "GF_AWS_default_REGION=us-east-1" \
+  grafana/grafana
 ```
 
-Visit [Grafana XXL project](https://github.com/monitoringartist/grafana-xxl)
-for more details.
+You may also specify multiple profiles to `GF_AWS_PROFILES` (e.g.
+`GF_AWS_PROFILES=default another`).
+
+Supported variables:
+
+- `GF_AWS_${profile}_ACCESS_KEY_ID`: AWS access key ID (required).
+- `GF_AWS_${profile}_SECRET_ACCESS_KEY`: AWS secret access  key (required).
+- `GF_AWS_${profile}_REGION`: AWS region (optional).
