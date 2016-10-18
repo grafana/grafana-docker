@@ -15,7 +15,8 @@ Try it out, default admin user is admin/admin.
 ## Configuring your Grafana container
 
 All options defined in conf/grafana.ini can be overriden using environment
-variables, for example:
+variables by using the syntax `GF_<SectionName>_<KeyName>`.  
+For example:
 
 ```
 docker run \
@@ -26,6 +27,8 @@ docker run \
   -e "GF_SECURITY_ADMIN_PASSWORD=secret" \
   grafana/grafana
 ```
+
+More information in the grafana configuration documentation: http://docs.grafana.org/installation/configuration/
 
 ## Grafana container with persistent storage (recommended)
 
