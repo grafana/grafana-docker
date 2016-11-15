@@ -30,7 +30,7 @@ if [ ! -z ${GF_AWS_PROFILES+x} ]; then
     chmod 600 ~grafana/.aws/credentials
 fi
 
-if [ ! -z ${GF_INSTALL_PLUGINS} ]; then
+if [ ! -z "${GF_INSTALL_PLUGINS}" ]; then
   OLDIFS=$IFS
   IFS=','
   for plugin in ${GF_INSTALL_PLUGINS}; do
