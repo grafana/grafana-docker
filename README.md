@@ -15,7 +15,7 @@ Try it out, default admin user is admin/admin.
 ## Configuring your Grafana container
 
 All options defined in conf/grafana.ini can be overriden using environment
-variables by using the syntax `GF_<SectionName>_<KeyName>`.  
+variables by using the syntax `GF_<SectionName>_<KeyName>`.
 For example:
 
 ```
@@ -91,3 +91,8 @@ Supported variables:
 - `GF_AWS_${profile}_ACCESS_KEY_ID`: AWS access key ID (required).
 - `GF_AWS_${profile}_SECRET_ACCESS_KEY`: AWS secret access  key (required).
 - `GF_AWS_${profile}_REGION`: AWS region (optional).
+
+## Changelog
+
+* Make it possible to install specific plugin version https://github.com/grafana/grafana-docker/issues/59#issuecomment-260584026
+
