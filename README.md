@@ -94,5 +94,9 @@ Supported variables:
 
 ## Changelog
 
+### v4.0.0-beta2
+* Plugins dir (`/var/lib/grafana/plugins`) is no longer a separate volume
+
+### v3.1.1
 * Make it possible to install specific plugin version https://github.com/grafana/grafana-docker/issues/59#issuecomment-260584026
 
