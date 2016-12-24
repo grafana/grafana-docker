@@ -4,6 +4,11 @@
 : "${GF_PATHS_LOGS:=/var/log/grafana}"
 : "${GF_PATHS_PLUGINS:=/var/lib/grafana/plugins}"
 
+if [ -n "${UID}" ] && [ -n "${GID}" ]; then
+        usermod -u ${UID} grafana
+        groupmod -g ${GID} grafana
+fi
+
 chown -R grafana:grafana "$GF_PATHS_DATA" "$GF_PATHS_LOGS"
 chown -R grafana:grafana /etc/grafana
 
