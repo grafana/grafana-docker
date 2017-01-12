@@ -94,6 +94,9 @@ Supported variables:
 
 ## Changelog
 
+### v4.2.0
+* Plugins are now installed into ${GF_PATHS_PLUGINS}
+
 ### v4.0.0-beta2
 * Plugins dir (`/var/lib/grafana/plugins`) is no longer a separate volume
 
