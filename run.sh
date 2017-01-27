@@ -39,9 +39,10 @@ if [ ! -z "${GF_INSTALL_PLUGINS}" ]; then
   IFS=$OLDIFS
 fi
 
-exec gosu grafana /usr/sbin/grafana-server  \
-  --homepath=/usr/share/grafana             \
-  --config=/etc/grafana/grafana.ini         \
-  cfg:default.paths.data="$GF_PATHS_DATA"   \
-  cfg:default.paths.logs="$GF_PATHS_LOGS"   \
-  cfg:default.paths.plugins="$GF_PATHS_PLUGINS"
+exec gosu grafana /usr/sbin/grafana-server      \
+  --homepath=/usr/share/grafana                 \
+  --config=/etc/grafana/grafana.ini             \
+  cfg:default.paths.data="$GF_PATHS_DATA"       \
+  cfg:default.paths.logs="$GF_PATHS_LOGS"       \
+  cfg:default.paths.plugins="$GF_PATHS_PLUGINS" \
+  "$@"
