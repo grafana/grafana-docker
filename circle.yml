@@ -6,6 +6,7 @@ machine:
     version: 2.7.3
   services:
     - docker
+  environment:
 
 dependencies:
   cache_directories:
@@ -13,11 +14,22 @@ dependencies:
 
   pre:
     - docker info
-    - > 
-      if [ -n "${CREATE_MASTER_IMAGE}" ]; then
-        ./build.sh latest master
+    - echo $GRAFANA_VERSION
+    - >
+      if [ "$GRAFANA_VERSION" != "" ]; then
+        echo "Building version ${GRAFANA_VERSION}"
+        docker build \
+          --build-arg DOWNLOAD_URL=https://s3-us-west-2.amazonaws.com/grafana-releases/release/grafana_${GRAFANA_VERSION}_amd64.deb \
+          --tag "grafana/grafana:${GRAFANA_VERSION}" \
+          --no-cache=true .
+        docker tag grafana/grafana:${GRAFANA_VERSION} grafana/grafana:latest
+
       else
-        ./build.sh
+        echo "Building latest for master"
+        docker build \
+          --build-arg DOWNLOAD_URL=https://s3-us-west-2.amazonaws.com/grafana-releases/master/grafana_latest_amd64.deb \
+          --tag "grafana/grafana:master" \
+          --no-cache=true .
       fi
 
 test:
@@ -27,12 +39,18 @@ test:
 deployment:
   develop:
     branch: master
-    owner: grafana
     commands:
       - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
       - >
-        if [ -n "${CREATE_MASTER_IMAGE}" ]; then
-          ./push_to_docker_hub.sh master
+        if [ "$GRAFANA_VERSION" != "" ]; then
+          echo "push! ${GRAFANA_VERSION}"
+          
         else
-          ./push_to_docker_hub.sh
+          echo "pushing! master"
+          docker push grafana/grafana:master
         fi
+
+
+#docker push grafana/grafana:${GRAFANA_TAG}
+#docker push grafana/grafana:latest
+#docker build --build-arg DOWNLOAD_URL=https://s3-us-west-2.amazonaws.com/grafana-releases/release/grafana_${GRAFANA_VERSION}_amd64.deb --tag "grafana/grafana:${GRAFANA_TAG}" --no-cache=true .
