@@ -1,10 +1,12 @@
-_grafana_tag=$1
+#!/bin/bash
 
-if [ -z "${_grafana_tag}" ]; then
-	source GRAFANA_VERSION
-	_grafana_tag=$GRAFANA_VERSION
-	docker push grafana/grafana:${_grafana_tag}
-	docker push grafana/grafana:latest
+_grafana_version=$1
+
+if [ "$_grafana_version" != "" ]; then
+	echo "push! ${_grafana_version}"
+	docker push grafana/grafana:${_grafana_version}
+	#docker push grafana/grafana:latest
 else
-	docker push grafana/grafana:${_grafana_tag}
+	echo "pushing! master"
+	docker push grafana/grafana:master
 fi

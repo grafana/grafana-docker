@@ -9,9 +9,6 @@ machine:
   environment:
 
 dependencies:
-  cache_directories:
-    - "~/docker"
-
   pre:
     - docker info
     - echo $GRAFANA_VERSION
@@ -26,16 +23,4 @@ deployment:
     branch: master
     commands:
       - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
-      - >
-        if [ "$GRAFANA_VERSION" != "" ]; then
-          echo "push! ${GRAFANA_VERSION}"
-          
-        else
-          echo "pushing! master"
-          docker push grafana/grafana:master
-        fi
-
-
-#docker push grafana/grafana:${GRAFANA_TAG}
-#docker push grafana/grafana:latest
-#docker build --build-arg DOWNLOAD_URL=https://s3-us-west-2.amazonaws.com/grafana-releases/release/grafana_${GRAFANA_VERSION}_amd64.deb --tag "grafana/grafana:${GRAFANA_TAG}" --no-cache=true .
+      - ./push_to_docker_hub.sh
