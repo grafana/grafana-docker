@@ -2,9 +2,6 @@ FROM debian:jessie
 
 ARG DOWNLOAD_URL
 
-#curl https://grafanarel.s3.amazonaws.com/builds/grafana_${GRAFANA_VERSION}_amd64.deb > /tmp/grafana.deb && \
-
-
 RUN apt-get update && \
     apt-get -y --no-install-recommends install libfontconfig curl ca-certificates && \
     apt-get clean && \
