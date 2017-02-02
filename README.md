@@ -96,6 +96,7 @@ Supported variables:
 
 ### v4.2.0
 * Plugins are now installed into ${GF_PATHS_PLUGINS}
+* Building the container now requires a full url to the deb package instead of just version
 
 ### v4.0.0-beta2
 * Plugins dir (`/var/lib/grafana/plugins`) is no longer a separate volume

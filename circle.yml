@@ -15,22 +15,7 @@ dependencies:
   pre:
     - docker info
     - echo $GRAFANA_VERSION
-    - >
-      if [ "$GRAFANA_VERSION" != "" ]; then
-        echo "Building version ${GRAFANA_VERSION}"
-        docker build \
-          --build-arg DOWNLOAD_URL=https://s3-us-west-2.amazonaws.com/grafana-releases/release/grafana_${GRAFANA_VERSION}_amd64.deb \
-          --tag "grafana/grafana:${GRAFANA_VERSION}" \
-          --no-cache=true .
-        docker tag grafana/grafana:${GRAFANA_VERSION} grafana/grafana:latest
-
-      else
-        echo "Building latest for master"
-        docker build \
-          --build-arg DOWNLOAD_URL=https://s3-us-west-2.amazonaws.com/grafana-releases/master/grafana_latest_amd64.deb \
-          --tag "grafana/grafana:master" \
-          --no-cache=true .
-      fi
+    - ./build.sh ${GRAFANA_VERSION}
 
 test:
   override:
