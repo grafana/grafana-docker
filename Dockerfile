@@ -14,7 +14,7 @@ RUN apt-get update && \
     apt-get autoremove -y && \
     rm -rf /var/lib/apt/lists/*
 
-VOLUME ["/var/lib/grafana", "/var/log/grafana", "/etc/grafana"]
+VOLUME ["/var/lib/grafana", "/etc/grafana"]
 
 EXPOSE 3000
 
