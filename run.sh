@@ -42,6 +42,7 @@ fi
 exec gosu grafana /usr/sbin/grafana-server      \
   --homepath=/usr/share/grafana                 \
   --config=/etc/grafana/grafana.ini             \
+  cfg:default.log.mode="console"                \
   cfg:default.paths.data="$GF_PATHS_DATA"       \
   cfg:default.paths.logs="$GF_PATHS_LOGS"       \
   cfg:default.paths.plugins="$GF_PATHS_PLUGINS" \
