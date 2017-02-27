@@ -23,4 +23,4 @@ deployment:
     branch: master
     commands:
       - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
-      - ./push_to_docker_hub.sh
+      - ./push_to_docker_hub.sh ${GRAFANA_VERSION}
