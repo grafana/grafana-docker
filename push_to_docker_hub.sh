@@ -1,7 +1,7 @@
 #!/bin/bash
 
 _grafana_tag=$1
-_grafana_version=${_grafana_tag:1:5}
+_grafana_version=${_grafana_tag:1}
 
 if [ "$_grafana_version" != "" ]; then
 	echo "pushing grafana/grafana:${_grafana_version}"
