@@ -1,6 +1,6 @@
 FROM debian:jessie
 
-ARG DOWNLOAD_URL
+ARG DOWNLOAD_URL=https://s3-us-west-2.amazonaws.com/grafana-releases/release/grafana_4.2.0_amd64.deb
 
 RUN apt-get update && \
     apt-get -y --no-install-recommends install libfontconfig curl ca-certificates && \
@@ -13,7 +13,7 @@ RUN apt-get update && \
     apt-get autoremove -y && \
     rm -rf /var/lib/apt/lists/*
 
-VOLUME ["/var/lib/grafana", "/var/log/grafana", "/etc/grafana"]
+VOLUME ["/var/lib/grafana", "/etc/grafana"]
 
 EXPOSE 3000
 
