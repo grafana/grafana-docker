@@ -7,6 +7,14 @@
 chown -R grafana:grafana "$GF_PATHS_DATA" "$GF_PATHS_LOGS"
 chown -R grafana:grafana /etc/grafana
 
+if [ ! -z "${GF_SERVER_CERT_FILE}" ]; then
+	chown -R grafana:grafana "${GF_SERVER_CERT_FILE}"
+fi
+
+if [ ! -z "${GF_SERVER_CERT_KEY}" ]; then
+	chown -R grafana:grafana "${GF_SERVER_CERT_KEY}"
+fi
+
 if [ ! -z ${GF_AWS_PROFILES+x} ]; then
     mkdir -p ~grafana/.aws/
     touch ~grafana/.aws/credentials
