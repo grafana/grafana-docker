@@ -39,6 +39,39 @@ if [ ! -z "${GF_INSTALL_PLUGINS}" ]; then
   done
 fi
 
+# Open a shell subprocess, whait until grafana starts and POST datasources
+# If the pod is killed it restarts with preconfigured dashboards
+# The downsize is that if the admin username and password is changed it is not
+# automaticaly updated.
+(
+cd /etc/grafana
+until $(curl --silent --fail --show-error --output /dev/null http://admin:admin@127.0.0.1:3000/api/datasources); do
+  printf '.' ; sleep 1 ;
+done ;
+for file in *-datasource.json ; do
+  if [ -e "$file" ] ; then
+    echo "importing $file" &&
+    curl --silent --fail --show-error \
+    --request POST http://admin:admin@127.0.0.1:3000/api/datasources \
+    --header "Content-Type: application/json" \
+    --data-binary "@$file" ;
+    echo "" ;
+  fi
+done ;
+for file in *-dashboard.json ; do
+  if [ -e "$file" ] ; then
+    # wrap exported Grafana dashboard into valid json
+    echo "importing $file" &&
+    (echo '{"dashboard":';cat "$file";echo ',"inputs":[{"name":"DS_PROMETHEUS","pluginId":"prometheus","type":"datasource","value":"prometheus"}]}') | curl --silent --fail --show-error \
+    --request POST http://admin:admin@127.0.0.1:3000/api/dashboards/import \
+    --header "Content-Type: application/json" \
+    --data-binary @-;
+    echo "" ;
+  fi
+done ;
+) &
+
+
 exec gosu grafana /usr/sbin/grafana-server      \
   --homepath=/usr/share/grafana                 \
   --config=/etc/grafana/grafana.ini             \

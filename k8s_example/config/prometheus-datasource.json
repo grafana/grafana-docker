@@ -1,0 +1,8 @@
+{
+  "name": "prometheus",
+  "type": "prometheus",
+  "url": "http://prometheus.monitoring:30042",
+  "access": "proxy",
+  "basicAuth": false,
+  "isDefault": true
+}
