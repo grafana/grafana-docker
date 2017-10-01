@@ -34,6 +34,8 @@ docker run \
   grafana/grafana
 ```
 
+You can use your own grafana.ini file by using environment variable `GF_PATHS_CONFIG`.
+
 More information in the grafana configuration documentation: http://docs.grafana.org/installation/configuration/
 
 ## Grafana container with persistent storage (recommended)
