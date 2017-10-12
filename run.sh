@@ -1,5 +1,6 @@
 #!/bin/bash -e
 
+: "${GF_PATHS_CONFIG:=/etc/grafana/grafana.ini}"
 : "${GF_PATHS_DATA:=/var/lib/grafana}"
 : "${GF_PATHS_LOGS:=/var/log/grafana}"
 : "${GF_PATHS_PLUGINS:=/var/lib/grafana/plugins}"
@@ -41,7 +42,7 @@ fi
 
 exec gosu grafana /usr/sbin/grafana-server      \
   --homepath=/usr/share/grafana                 \
-  --config=/etc/grafana/grafana.ini             \
+  --config="$GF_PATHS_CONFIG".                  \
   cfg:default.log.mode="console"                \
   cfg:default.paths.data="$GF_PATHS_DATA"       \
   cfg:default.paths.logs="$GF_PATHS_LOGS"       \
