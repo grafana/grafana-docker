@@ -1,5 +1,7 @@
 # Grafana Docker image
 
+[![CircleCI](https://circleci.com/gh/grafana/grafana-docker.svg?style=svg)](https://circleci.com/gh/grafana/grafana-docker)
+
 This project builds a Docker image with the latest master build of Grafana.
 
 ## Running your Grafana container
