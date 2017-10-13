@@ -1,0 +1,60 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: grafana
+  namespace: monitoring
+spec:
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 0
+      maxUnavailable: 1
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: grafana
+      component: monitoring
+  template:
+    metadata:
+      labels:
+        app: grafana
+        component: monitoring
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+      - name: grafana
+        # image: grafana/grafana:4.3.2
+        image: <registry server here>/monitoring/grafana/grafana:4.3.2
+        imagePullPolicy: Always
+        resources:
+          limits:
+            cpu: 100m
+            memory: 100Mi
+          requests:
+            cpu: 100m
+            memory: 100Mi
+        ports:
+        - containerPort: 3000
+        env:
+          - name: GF_AUTH_BASIC_ENABLED
+            value: "false"
+          - name: GF_AUTH_ANONYMOUS_ENABLED
+            value: "true"
+          - name: GF_AUTH_ANONYMOUS_ORG_ROLE
+            value: Admin
+        volumeMounts:
+        - name: grafana-persistent-storage
+          mountPath: /var
+        volumeMounts:
+        - name: grafana-config-volume
+          mountPath: /etc/grafana
+      volumes:
+      - name: grafana-persistent-storage
+        emptyDir: {}
+      - name: grafana-config-volume
+        configMap:
+          name: grafana-config
+      imagePullSecrets:
+      - name: dockerlogin
+      # hostNetwork: true
+      # hostPID: true

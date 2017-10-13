@@ -102,6 +102,10 @@ Supported variables:
 - `GF_AWS_${profile}_SECRET_ACCESS_KEY`: AWS secret access  key (required).
 - `GF_AWS_${profile}_REGION`: AWS region (optional).
 
+## Using inside kubernetes with preconfigured dashboards.
+
+check k8s_example repository subfolder.
+
 ## Changelog
 
 ### v4.2.0
@@ -114,4 +118,3 @@ Supported variables:
 
 ### v3.1.1
 * Make it possible to install specific plugin version https://github.com/grafana/grafana-docker/issues/59#issuecomment-260584026
-
