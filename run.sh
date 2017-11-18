@@ -4,9 +4,15 @@
 : "${GF_PATHS_DATA:=/var/lib/grafana}"
 : "${GF_PATHS_LOGS:=/var/log/grafana}"
 : "${GF_PATHS_PLUGINS:=/var/lib/grafana/plugins}"
+: "${GF_CHOWN_DATA}:=true}"
+: "${GF_CHOWN_ETC}:=true}"
 
-chown -R grafana:grafana "$GF_PATHS_DATA" "$GF_PATHS_LOGS"
-chown -R grafana:grafana /etc/grafana
+if [ "${GF_CHOWN_DATA}" == true ]; then
+  chown -R grafana:grafana "$GF_PATHS_DATA" "$GF_PATHS_LOGS"
+fi
+if [ "${GF_CHOWN_ETC}" == true ]; then
+  chown -R grafana:grafana /etc/grafana
+fi
 
 if [ ! -z ${GF_AWS_PROFILES+x} ]; then
     mkdir -p ~grafana/.aws/
