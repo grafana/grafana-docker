@@ -4,6 +4,7 @@
 : "${GF_PATHS_DATA:=/var/lib/grafana}"
 : "${GF_PATHS_LOGS:=/var/log/grafana}"
 : "${GF_PATHS_PLUGINS:=/var/lib/grafana/plugins}"
+: "${GF_PATHS_PROVISIONING:=/etc/grafana/provisioning}"
 
 chown -R grafana:grafana "$GF_PATHS_DATA" "$GF_PATHS_LOGS"
 chown -R grafana:grafana /etc/grafana
@@ -40,11 +41,12 @@ if [ ! -z "${GF_INSTALL_PLUGINS}" ]; then
   done
 fi
 
-exec gosu grafana /usr/sbin/grafana-server      \
-  --homepath=/usr/share/grafana                 \
-  --config="$GF_PATHS_CONFIG"                   \
-  cfg:default.log.mode="console"                \
-  cfg:default.paths.data="$GF_PATHS_DATA"       \
-  cfg:default.paths.logs="$GF_PATHS_LOGS"       \
-  cfg:default.paths.plugins="$GF_PATHS_PLUGINS" \
+exec gosu grafana /usr/sbin/grafana-server              \
+  --homepath=/usr/share/grafana                         \
+  --config="$GF_PATHS_CONFIG"                           \
+  cfg:default.log.mode="console"                        \
+  cfg:default.paths.data="$GF_PATHS_DATA"               \
+  cfg:default.paths.logs="$GF_PATHS_LOGS"               \
+  cfg:default.paths.plugins="$GF_PATHS_PLUGINS"         \
+  cfg:default.paths.provisioning=$GF_PATHS_PROVISIONING \
   "$@"
