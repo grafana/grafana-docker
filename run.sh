@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/bash
 
 : "${GF_PATHS_CONFIG:=/etc/grafana/grafana.ini}"
 : "${GF_PATHS_DATA:=/var/lib/grafana}"
