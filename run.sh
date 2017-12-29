@@ -6,8 +6,12 @@
 : "${GF_PATHS_PLUGINS:=/var/lib/grafana/plugins}"
 : "${GF_PATHS_PROVISIONING:=/etc/grafana/provisioning}"
 
-chown -R grafana:grafana "$GF_PATHS_DATA" "$GF_PATHS_LOGS"
-chown -R grafana:grafana /etc/grafana
+#chown takes a long time when the directory has a lot of files, especially if you mount a persistent directory.
+#chown -R grafana:grafana "$GF_PATHS_DATA" "$GF_PATHS_LOGS"
+find "$GF_PATHS_DATA" ! -group grafana -o ! -user grafana  -exec chown grafana:grafana {} +
+find "$GF_PATHS_LOGS" ! -group grafana -o ! -user grafana  -exec chown grafana:grafana {} +
+#chown -R grafana:grafana /etc/grafana
+find "/etc/grafana" ! -group grafana -o ! -user grafana  -exec chown grafana:grafana {} +
 
 if [ ! -z ${GF_AWS_PROFILES+x} ]; then
     mkdir -p ~grafana/.aws/
