@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 _grafana_version=$1
 
