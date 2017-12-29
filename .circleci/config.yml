@@ -1,0 +1,17 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: docker:stable-git
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run: docker info
+      - run: echo $GRAFANA_VERSION
+      - run: ./build.sh ${GRAFANA_VERSION}
+      - deploy:
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              docker login -u $DOCKER_USER -p $DOCKER_PASS
+              ./push_to_docker_hub.sh ${GRAFANA_VERSION}
+            fi

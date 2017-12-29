@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 _grafana_tag=$1
 _grafana_version=${_grafana_tag:1}
