@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-: "${GF_PATHS_CONFIG:=/etc/grafana/grafana.ini}"
+: "${GF_PATHS_CONFIG:=/etc/grafana/custom.ini}"
 : "${GF_PATHS_DATA:=/var/lib/grafana}"
 : "${GF_PATHS_LOGS:=/var/log/grafana}"
 : "${GF_PATHS_PLUGINS:=/var/lib/grafana/plugins}"
@@ -8,8 +8,9 @@
 
 chown -R grafana:grafana "$GF_PATHS_DATA" "$GF_PATHS_LOGS"
 chown -R grafana:grafana /etc/grafana
-
+echo "finishing chown"
 if [ ! -z ${GF_AWS_PROFILES+x} ]; then
+    echo "IN PROFILES"
     mkdir -p ~grafana/.aws/
     touch ~grafana/.aws/credentials
 
@@ -31,7 +32,7 @@ if [ ! -z ${GF_AWS_PROFILES+x} ]; then
     chown grafana:grafana -R ~grafana/.aws
     chmod 600 ~grafana/.aws/credentials
 fi
-
+echo "out of profiles"
 if [ ! -z "${GF_INSTALL_PLUGINS}" ]; then
   OLDIFS=$IFS
   IFS=','
@@ -40,7 +41,7 @@ if [ ! -z "${GF_INSTALL_PLUGINS}" ]; then
     gosu grafana grafana-cli --pluginsDir "${GF_PATHS_PLUGINS}" plugins install ${plugin}
   done
 fi
-
+echo "executing"
 exec gosu grafana /usr/sbin/grafana-server              \
   --homepath=/usr/share/grafana                         \
   --config="$GF_PATHS_CONFIG"                           \

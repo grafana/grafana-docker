@@ -13,9 +13,10 @@ RUN apt-get update && \
     apt-get autoremove -y && \
     rm -rf /var/lib/apt/lists/*
 
+ADD custom.ini /etc/grafana/custom.ini
 VOLUME ["/var/lib/grafana", "/var/log/grafana", "/etc/grafana"]
 
-EXPOSE 3000
+EXPOSE 3034
 
 COPY ./run.sh /run.sh
 
