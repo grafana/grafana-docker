@@ -4,8 +4,20 @@
 
 This project builds a Docker image with the latest master build of Grafana.
 
-## Running your Grafana container
+## Config 
 
+* Configuration is protected by git-crypt. Ask Dj Ballard for how to unlock 
+* Project configuration files must follow the $PROJECT_NAME.ini pattern to be detected and encrypted 
+* each project will need its own configuration files
+* 
+
+## Running your Grafana container
+Our setup: 
+Please look at the ```custom_start.sh``` for what I use to start/build a container
+another example of passing in some environment variables is in ```start_container.sh```
+
+
+Default Advice:
 Start your container binding the external port `3000`.
 
 ```
@@ -22,6 +34,10 @@ After that continue testing by modifying your client request to grafana.
 
 ## Configuring your Grafana container
 
+Our Setup:
+Project specific customization is written in $PROJECT_NAME.ini and is loaded into the container based on that
+
+Default Advice:
 All options defined in conf/grafana.ini can be overriden using environment
 variables by using the syntax `GF_<SectionName>_<KeyName>`.
 For example:
