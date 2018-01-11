@@ -4,6 +4,25 @@
 
 This project builds a Docker image with the latest master build of Grafana.
 
+## To Do
+
+1. Iterate on config files
+2. Scaffold acustomer specific thingy abobbers
+3. update elasticsearch policy to allow grafana access and disallow IP access 
+4. 
+
+## how to roll out in no particular order
+
+1. create a config for the customer
+2. create an okta application using finn-app as an example
+3. fill in config with okta + infrastructure creds
+4. scaffold grafana service 
+5. remove IP elasticsearch access policy in favor of a policy that allows grafana access
+6. deploy grafana
+7. setup some non okta admin accounts
+8. hookup customers elaticsearch as a backend 
+9. dance wildly 
+
 ## Config 
 
 * Configuration is protected by git-crypt. Ask Dj Ballard for how to unlock 
@@ -57,6 +76,8 @@ You can use your own grafana.ini file by using environment variable `GF_PATHS_CO
 More information in the grafana configuration documentation: http://docs.grafana.org/installation/configuration/
 
 ## Grafana container with persistent storage (recommended)
+
+Default advice is mostly for local building, we should use our available postgres databases as per finn-app.ini example
 
 ```
 # create /var/lib/grafana as persistent volume storage
