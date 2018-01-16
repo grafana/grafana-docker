@@ -1,7 +1,7 @@
 #!/bin/bash
 
 _grafana_tag=$1
-_grafana_version=${_grafana_tag:1}
+#_grafana_version=${_grafana_tag:1}
 
 if [ "$_grafana_version" != "" ]; then
 	echo "Building version ${_grafana_version}"
@@ -15,7 +15,8 @@ if [ "$_grafana_version" != "" ]; then
 else
 	echo "Building latest for master"
 	docker build \
+		--build-arg PROJECT_NAME=$1 \
 		--build-arg DOWNLOAD_URL=https://s3-us-west-2.amazonaws.com/grafana-releases/master/grafana_latest_amd64.deb \
-		--tag "grafana/grafana:master" \
+		--tag "$1-grafana/grafana:master" \
 		--no-cache=true .
 fi
