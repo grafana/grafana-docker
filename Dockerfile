@@ -1,33 +1,24 @@
-FROM dockerfile/nodejs
+FROM debian:jessie
 
-RUN curl -SL https://storage.googleapis.com/golang/go1.4.linux-amd64.tar.gz \
-    | tar -xzC /usr/local
+ARG DOWNLOAD_URL
+ARG PROJECT_NAME=finn-app 
+ENV PROJECT_NAME ${PROJECT_NAME}
+RUN apt-get update && \
+    apt-get -y --no-install-recommends install libfontconfig curl ca-certificates && \
+    apt-get clean && \
+    curl ${DOWNLOAD_URL} > /tmp/grafana.deb && \
+    dpkg -i /tmp/grafana.deb && \
+    rm /tmp/grafana.deb && \
+    curl -L https://github.com/tianon/gosu/releases/download/1.10/gosu-amd64 > /usr/sbin/gosu && \
+    chmod +x /usr/sbin/gosu && \
+    apt-get autoremove -y && \
+    rm -rf /var/lib/apt/lists/*
 
-ENV GOPATH /go
-ENV PATH $PATH:/usr/local/go/bin:$GOPATH/bin
+ADD "$PROJECT_NAME".ini /etc/grafana/custom.ini
+VOLUME ["/var/lib/grafana", "/var/log/grafana", "/etc/grafana"]
 
+EXPOSE 3034
 
-ENV GF_REPO_URL https://github.com/grafana/grafana.git
-ENV GF_GO_PATH /go/src/github.com/grafana/grafana
+COPY ./run.sh /run.sh
 
-RUN apt-get -y update
-RUN apt-get -y install libfontconfig
-
-RUN   mkdir -p /go/src/github.com/grafana             &&\
-      git clone -b develop $GF_REPO_URL $GF_GO_PATH   &&\
-      cd $GF_GO_PATH                                  &&\
-      go run build.go setup                           &&\
-      go run build.go build                           &&\
-      npm install                        &&\
-      npm install -g grunt-cli           &&\
-      grunt release                      &&\
-      mkdir -p /opt/grafana              &&\
-      cd tmp                             &&\
-      cp -r * /opt/grafana
-
-EXPOSE 3000
-
-VOLUME ["/opt/grafana/data"]
-
-WORKDIR /opt/grafana
-ENTRYPOINT ["/opt/grafana/grafana", "web"]
+ENTRYPOINT ["/run.sh"]
