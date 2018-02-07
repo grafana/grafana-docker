@@ -8,7 +8,7 @@ RUN apt-get update && \
     curl ${DOWNLOAD_URL} > /tmp/grafana.deb && \
     dpkg -i /tmp/grafana.deb && \
     rm /tmp/grafana.deb && \
-    curl -L https://github.com/tianon/gosu/releases/download/1.7/gosu-amd64 > /usr/sbin/gosu && \
+    curl -L https://github.com/tianon/gosu/releases/download/1.10/gosu-amd64 > /usr/sbin/gosu && \
     chmod +x /usr/sbin/gosu && \
     apt-get autoremove -y && \
     rm -rf /var/lib/apt/lists/*

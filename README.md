@@ -1,5 +1,7 @@
 # Grafana Docker image
 
+[![CircleCI](https://circleci.com/gh/grafana/grafana-docker.svg?style=svg)](https://circleci.com/gh/grafana/grafana-docker)
+
 This project builds a Docker image with the latest master build of Grafana.
 
 ## Running your Grafana container
@@ -11,6 +13,12 @@ docker run -d --name=grafana -p 3000:3000 grafana/grafana
 ```
 
 Try it out, default admin user is admin/admin.
+
+In case port 3000 is closed for external clients or you there is no access 
+to the browser - you may test it by issuing:
+  curl -i localhost:3000/login
+Make sure that you are getting "...200 OK" in response.
+After that continue testing by modifying your client request to grafana.
 
 ## Configuring your Grafana container
 
@@ -27,6 +35,8 @@ docker run \
   -e "GF_SECURITY_ADMIN_PASSWORD=secret" \
   grafana/grafana
 ```
+
+You can use your own grafana.ini file by using environment variable `GF_PATHS_CONFIG`.
 
 More information in the grafana configuration documentation: http://docs.grafana.org/installation/configuration/
 
