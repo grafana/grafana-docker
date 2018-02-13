@@ -10,7 +10,7 @@ chown -R grafana:grafana "$GF_PATHS_DATA" "$GF_PATHS_LOGS"
 
 if [ ! -z ${GF_AWS_PROFILES+x} ]; then
     mkdir -p ~grafana/.aws/
-    touch ~grafana/.aws/credentials
+    > ~grafana/.aws/credentials
 
     for profile in ${GF_AWS_PROFILES}; do
         access_key_varname="GF_AWS_${profile}_ACCESS_KEY_ID"
