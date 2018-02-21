@@ -1,10 +1,29 @@
 #!/bin/bash -e
 
+# TODO : implement more env variables like protocol, url etc
+
+
 : "${GF_PATHS_CONFIG:=/etc/grafana/grafana.ini}"
 : "${GF_PATHS_DATA:=/var/lib/grafana}"
 : "${GF_PATHS_LOGS:=/var/log/grafana}"
 : "${GF_PATHS_PLUGINS:=/var/lib/grafana/plugins}"
 : "${GF_PATHS_PROVISIONING:=/etc/grafana/provisioning}"
+
+# Default values
+if [ -z "${GF_SECURITY_ADMIN_USER}" ]; then
+  export GF_SECURITY_ADMIN_USER="admin"
+fi
+
+if [ -z "${GF_SECURITY_ADMIN_PASSWORD}" ]; then
+  export GF_SECURITY_ADMIN_PASSWORD="admin"
+fi
+
+if [ -z "${GF_SERVER_HTTP_PORT}" ]; then
+  echo "Using standard server port"
+  export GF_SERVER_HTTP_PORT="3000"
+fi
+
+
 
 chown -R grafana:grafana "$GF_PATHS_DATA" "$GF_PATHS_LOGS"
 
@@ -31,6 +50,7 @@ if [ ! -z ${GF_AWS_PROFILES+x} ]; then
     chmod 600 ~grafana/.aws/credentials
 fi
 
+# Install plugins
 if [ ! -z "${GF_INSTALL_PLUGINS}" ]; then
   OLDIFS=$IFS
   IFS=','
@@ -40,6 +60,7 @@ if [ ! -z "${GF_INSTALL_PLUGINS}" ]; then
   done
 fi
 
+# Start server
 exec gosu grafana /usr/sbin/grafana-server              \
   --homepath=/usr/share/grafana                         \
   --config="$GF_PATHS_CONFIG"                           \
@@ -48,4 +69,35 @@ exec gosu grafana /usr/sbin/grafana-server              \
   cfg:default.paths.logs="$GF_PATHS_LOGS"               \
   cfg:default.paths.plugins="$GF_PATHS_PLUGINS"         \
   cfg:default.paths.provisioning=$GF_PATHS_PROVISIONING \
-  "$@"
+  "$@" &
+
+
+
+# Wait for complete service startup
+while ! nc -z localhost $GF_SERVER_HTTP_PORT; do   
+  sleep 1
+done
+echo "----------------"
+
+if [ ! -z "${GF_INSTALL_PLUGINS}" ]; then
+  echo "Enabling plugins:"
+  OLDIFS=$IFS
+  IFS=','
+  for plugin in ${GF_INSTALL_PLUGINS}; do
+    IFS=$OLDIFS
+    curl -v -XPOST "http://$GF_SECURITY_ADMIN_USER:$GF_SECURITY_ADMIN_PASSWORD@localhost:$GF_SERVER_HTTP_PORT/api/plugins/$plugin/settings?enabled=true" -d ''
+  done
+fi
+
+
+if [ ! -z "${GF_DATASOURCES}" ]; then
+  echo "Importing datasources:"
+  OLDIFS=$IFS
+  IFS=';'
+  for ds in ${GF_DATASOURCES}; do
+    curl -H "Content-Type: application/json" -XPOST -d "$( echo $ds  )" http://$GF_SECURITY_ADMIN_USER:$GF_SECURITY_ADMIN_PASSWORD@localhost:$GF_SERVER_HTTP_PORT/api/datasources 
+  done
+
+fi
+
+
