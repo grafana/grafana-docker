@@ -1,7 +1,10 @@
 #!/bin/bash -e
 
-# TODO : implement more env variables like protocol, url etc
-
+# TODO : 
+# - implement more env variables like protocol, url etc
+# - better daemonization
+# - test multiple datasource import
+# - add dashboard import
 
 : "${GF_PATHS_CONFIG:=/etc/grafana/grafana.ini}"
 : "${GF_PATHS_DATA:=/var/lib/grafana}"
