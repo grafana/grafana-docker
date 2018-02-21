@@ -100,4 +100,5 @@ if [ ! -z "${GF_DATASOURCES}" ]; then
 
 fi
 
-
+# do not exit, keep it running
+wait $( pidof grafana-server )
