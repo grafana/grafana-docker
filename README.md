@@ -58,6 +58,7 @@ docker run \
 ## Installing plugins for Grafana 3
 
 Pass the plugins you want installed to docker with the `GF_INSTALL_PLUGINS` environment variable as a comma seperated list. This will pass each plugin name to `grafana-cli plugins install ${plugin}`.
+Plugins will be automatically enabled upon startup.
 
 ```
 docker run \
@@ -101,6 +102,25 @@ Supported variables:
 - `GF_AWS_${profile}_ACCESS_KEY_ID`: AWS access key ID (required).
 - `GF_AWS_${profile}_SECRET_ACCESS_KEY`: AWS secret access  key (required).
 - `GF_AWS_${profile}_REGION`: AWS region (optional).
+
+
+## Provide datasources and dashboards (experimental + improvment needed)
+
+Provide datasources and dashboard for automatic provisioning:
+
+```
+docker run \
+  -e GF_DATASOURCES="$( cat datasources )" \
+  -e GF_DASHBOARDS="$( cat dashboards )" \
+  -e "GF_INSTALL_PLUGINS=alexanderzobnin-zabbix-app" \
+  -p 3000:3000 \
+  grafana/grafana
+```
+
+Important notes:
+- datasources file: each datasource must be in JSON format and must terminate with a ";"
+- dashboards file: each dashboard must be in JSON format, id must be set to "null" and must terminate with a ";"
+
 
 ## Changelog
 
