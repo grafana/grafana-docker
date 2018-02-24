@@ -14,10 +14,12 @@
 
 # Default values
 if [ -z "${GF_SECURITY_ADMIN_USER}" ]; then
+  echo "Using standard admin username"
   export GF_SECURITY_ADMIN_USER="admin"
 fi
 
 if [ -z "${GF_SECURITY_ADMIN_PASSWORD}" ]; then
+  echo "Using standard admin password"
   export GF_SECURITY_ADMIN_PASSWORD="admin"
 fi
 
@@ -25,6 +27,12 @@ if [ -z "${GF_SERVER_HTTP_PORT}" ]; then
   echo "Using standard server port"
   export GF_SERVER_HTTP_PORT="3000"
 fi
+
+if [ -z "${GF_SERVER_PROTOCOL}" ]; then
+  echo "Using standard HTTP protocol"
+  export GF_SERVER_PROTOCOL="http"
+fi
+
 
 
 
@@ -82,13 +90,14 @@ while ! nc -z localhost $GF_SERVER_HTTP_PORT; do
 done
 echo "----------------"
 
+
 if [ ! -z "${GF_INSTALL_PLUGINS}" ]; then
   echo "Enabling plugins:"
   OLDIFS=$IFS
   IFS=','
   for plugin in ${GF_INSTALL_PLUGINS}; do
     IFS=$OLDIFS
-    curl -v -XPOST "http://$GF_SECURITY_ADMIN_USER:$GF_SECURITY_ADMIN_PASSWORD@localhost:$GF_SERVER_HTTP_PORT/api/plugins/$plugin/settings?enabled=true" -d ''
+    curl -v -XPOST "$GF_SERVER_PROTOCOL://$GF_SECURITY_ADMIN_USER:$GF_SECURITY_ADMIN_PASSWORD@localhost:$GF_SERVER_HTTP_PORT/api/plugins/$plugin/settings?enabled=true" -d ''
   done
 fi
 
@@ -98,10 +107,12 @@ if [ ! -z "${GF_DATASOURCES}" ]; then
   OLDIFS=$IFS
   IFS=';'
   for ds in ${GF_DATASOURCES}; do
-    curl -H "Content-Type: application/json" -XPOST -d "$( echo $ds  )" http://$GF_SECURITY_ADMIN_USER:$GF_SECURITY_ADMIN_PASSWORD@localhost:$GF_SERVER_HTTP_PORT/api/datasources 
+    curl -H "Content-Type: application/json" -XPOST -d "$( echo $ds  )" $GF_SERVER_PROTOCOL://$GF_SECURITY_ADMIN_USER:$GF_SECURITY_ADMIN_PASSWORD@localhost:$GF_SERVER_HTTP_PORT/api/datasources 
   done
-
 fi
+
+
+
 
 # do not exit, keep it running
 wait $( pidof grafana-server )
