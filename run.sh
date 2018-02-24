@@ -106,11 +106,19 @@ if [ ! -z "${GF_DATASOURCES}" ]; then
   echo "Importing datasources:"
   OLDIFS=$IFS
   IFS=';'
-  for ds in ${GF_DATASOURCES}; do
-    curl -H "Content-Type: application/json" -XPOST -d "$( echo $ds  )" $GF_SERVER_PROTOCOL://$GF_SECURITY_ADMIN_USER:$GF_SECURITY_ADMIN_PASSWORD@localhost:$GF_SERVER_HTTP_PORT/api/datasources 
+  for datasource in ${GF_DATASOURCES}; do
+    curl -H "Content-Type: application/json" -XPOST -d "$( echo $datasource )" $GF_SERVER_PROTOCOL://$GF_SECURITY_ADMIN_USER:$GF_SECURITY_ADMIN_PASSWORD@localhost:$GF_SERVER_HTTP_PORT/api/datasources 
   done
 fi
 
+if [ ! -z "${GF_DASHBOARDS}" ]; then
+  echo "Importing dashboards:"
+  OLDIFS=$IFS
+  IFS=';'
+  for dashboard in ${GF_DASHBOARDS}; do
+    curl -H "Content-Type: application/json" -XPOST -d "$( echo $dashboard )" $GF_SERVER_PROTOCOL://$GF_SECURITY_ADMIN_USER:$GF_SECURITY_ADMIN_PASSWORD@localhost:$GF_SERVER_HTTP_PORT/api/dashboards/db 
+  done
+fi
 
 
 
