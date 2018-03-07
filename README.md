@@ -68,6 +68,28 @@ docker run \
   grafana/grafana
 ```
 
+## Building a custom Grafana image with pre-installed plugins
+
+Dockerfile:
+```Dockerfile
+FROM grafana/grafana:5.0.0
+ENV GF_PATHS_PLUGINS=/opt/grafana-plugins
+RUN mkdir -p $GF_PATHS_PLUGINS
+RUN grafana-cli --pluginsDir $GF_PATHS_PLUGINS plugins install grafana-clock-panel
+```
+
+Add lines with `RUN grafana-cli ...` for each plugin you wish to install in your custom image. Don't forget to specify what version of Grafana you wish to build from (replace 5.0.0 in the example).
+
+Example of how to build and run:
+```bash
+docker build -t grafana:5.0.0-custom . 
+docker run \
+  -d \
+  -p 3000:3000 \
+  --name=grafana \
+  grafana:5.0.0-custom
+```
+
 ## Running specific version of Grafana
 
 ```
