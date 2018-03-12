@@ -6,8 +6,6 @@
 : "${GF_PATHS_PLUGINS:=/var/lib/grafana/plugins}"
 : "${GF_PATHS_PROVISIONING:=/etc/grafana/provisioning}"
 
-chown -R grafana:grafana "$GF_PATHS_DATA" "$GF_PATHS_LOGS"
-
 if [ ! -z ${GF_AWS_PROFILES+x} ]; then
     mkdir -p ~grafana/.aws/
     > ~grafana/.aws/credentials
@@ -27,7 +25,6 @@ if [ ! -z ${GF_AWS_PROFILES+x} ]; then
         fi
     done
 
-    chown grafana:grafana -R ~grafana/.aws
     chmod 600 ~grafana/.aws/credentials
 fi
 
@@ -36,11 +33,11 @@ if [ ! -z "${GF_INSTALL_PLUGINS}" ]; then
   IFS=','
   for plugin in ${GF_INSTALL_PLUGINS}; do
     IFS=$OLDIFS
-    gosu grafana grafana-cli --pluginsDir "${GF_PATHS_PLUGINS}" plugins install ${plugin}
+    grafana-cli --pluginsDir "${GF_PATHS_PLUGINS}" plugins install ${plugin}
   done
 fi
 
-exec gosu grafana /usr/sbin/grafana-server              \
+exec /usr/sbin/grafana-server                           \
   --homepath=/usr/share/grafana                         \
   --config="$GF_PATHS_CONFIG"                           \
   cfg:default.log.mode="console"                        \
