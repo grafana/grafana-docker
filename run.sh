@@ -6,7 +6,7 @@
 : "${GF_PATHS_PLUGINS:=/var/lib/grafana/plugins}"
 : "${GF_PATHS_PROVISIONING:=/etc/grafana/provisioning}"
 
-chown -R grafana:grafana "$GF_PATHS_DATA" "$GF_PATHS_LOGS"
+chown -R grafana:grafana "$GF_PATHS_DATA" "$GF_PATHS_LOGS" || true
 
 if [ ! -z ${GF_AWS_PROFILES+x} ]; then
     mkdir -p ~grafana/.aws/
