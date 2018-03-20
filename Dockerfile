@@ -17,12 +17,16 @@ RUN mkdir -p /etc/grafana/provisioning/datasources && \
     cp $GF_HOME/conf/sample.ini /etc/grafana/grafana.ini && \
     cp $GF_HOME/conf/ldap.toml /etc/grafana/ldap.toml && \
     cp $GF_HOME/bin/grafana-server /usr/sbin/grafana-server && \
-    cp $GF_HOME/bin/grafana-cli /usr/sbin/grafana-cli
+    cp $GF_HOME/bin/grafana-cli /usr/sbin/grafana-cli && \
+    chown -R nobody:nogroup /var/lib/grafana && \
+    chown -R nobody:nogroup $GF_HOME
 
 VOLUME ["/var/lib/grafana"]
 
 EXPOSE 3000
 
 COPY ./run.sh /run.sh
+
+USER nobody
 
 ENTRYPOINT [ "/run.sh" ]
