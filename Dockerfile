@@ -1,22 +1,28 @@
 FROM debian:jessie
 
-ARG DOWNLOAD_URL="https://s3-us-west-2.amazonaws.com/grafana-releases/master/grafana_latest_amd64.deb"
+ARG GRAFANA_VERSION="latest"
+ARG GF_HOME="/usr/share/grafana"
 
-RUN apt-get update && \
-    apt-get -y --no-install-recommends install libfontconfig curl ca-certificates && \
-    apt-get clean && \
-    curl ${DOWNLOAD_URL} > /tmp/grafana.deb && \
-    dpkg -i /tmp/grafana.deb && \
-    rm /tmp/grafana.deb && \
-    curl -L https://github.com/tianon/gosu/releases/download/1.10/gosu-amd64 > /usr/sbin/gosu && \
-    chmod +x /usr/sbin/gosu && \
+RUN apt-get update && apt-get install -qq -y wget tar sqlite libfontconfig curl ca-certificates && \
+    wget -O /tmp/grafana.tar.gz https://s3-us-west-2.amazonaws.com/grafana-releases/release/grafana-$GRAFANA_VERSION.linux-x64.tar.gz && \
+    tar -zxvf /tmp/grafana.tar.gz -C /tmp && rm /tmp/grafana.tar.gz && \
+    mv /tmp/grafana-* $GF_HOME && \
     apt-get autoremove -y && \
     rm -rf /var/lib/apt/lists/*
+    
+RUN mkdir -p /etc/grafana/provisioning/datasources && \
+    mkdir -p /etc/grafana/provisioning/dashboards && \
+    mkdir -p /var/lib/grafana/plugins && \
+    mkdir -p /var/log/grafana && \
+    cp $GF_HOME/conf/sample.ini /etc/grafana/grafana.ini && \
+    cp $GF_HOME/conf/ldap.toml /etc/grafana/ldap.toml && \
+    cp $GF_HOME/bin/grafana-server /usr/sbin/grafana-server && \
+    cp $GF_HOME/bin/grafana-cli /usr/sbin/grafana-cli
 
-VOLUME ["/var/lib/grafana", "/var/log/grafana", "/etc/grafana"]
+VOLUME ["/var/lib/grafana"]
 
 EXPOSE 3000
 
 COPY ./run.sh /run.sh
 
-ENTRYPOINT ["/run.sh"]
+ENTRYPOINT [ "/run.sh" ]
