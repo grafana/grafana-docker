@@ -43,17 +43,20 @@ More information in the grafana configuration documentation: http://docs.grafana
 ## Grafana container with persistent storage (recommended)
 
 ```
-# create /var/lib/grafana as persistent volume storage
-docker run -d -v /var/lib/grafana --name grafana-storage busybox:latest
+# create a persistent volume for your data in /var/lib/grafana (database and plugins)
+docker volume create grafana-storage
 
 # start grafana
 docker run \
   -d \
   -p 3000:3000 \
   --name=grafana \
-  --volumes-from grafana-storage \
+  -v grafana-storage:/var/lib/grafana \
   grafana/grafana
 ```
+
+Note: An unnamed volume will be created for you when you boot Grafana,
+using `docker volume create grafana-storage` just makes it easer to find.
 
 ## Installing plugins for Grafana 3
 
@@ -72,22 +75,25 @@ docker run \
 
 Dockerfile:
 ```Dockerfile
-FROM grafana/grafana:5.0.0
+FROM grafana/grafana:master
 ENV GF_PATHS_PLUGINS=/opt/grafana-plugins
-RUN mkdir -p $GF_PATHS_PLUGINS
-RUN grafana-cli --pluginsDir $GF_PATHS_PLUGINS plugins install grafana-clock-panel
+USER root
+RUN mkdir -p $GF_PATHS_PLUGINS && chown nobody:nogroup $GF_PATHS_PLUGINS
+USER nobody
+RUN grafana-cli --pluginsDir $GF_PATHS_PLUGINS plugins install grafana-clock-panel && \
+    grafana-cli --pluginsDir $GF_PATHS_PLUGINS plugins install grafana-simple-json-datasource
 ```
 
-Add lines with `RUN grafana-cli ...` for each plugin you wish to install in your custom image. Don't forget to specify what version of Grafana you wish to build from (replace 5.0.0 in the example).
+Add lines with `grafana-cli ...` for each plugin you wish to install in your custom image. Don't forget to specify what version of Grafana you wish to build from (replace master in the example).
 
 Example of how to build and run:
 ```bash
-docker build -t grafana:5.0.0-custom . 
+docker build -t grafana:master-with-plugins . 
 docker run \
   -d \
   -p 3000:3000 \
   --name=grafana \
-  grafana:5.0.0-custom
+  grafana:master-with-plugins
 ```
 
 ## Running specific version of Grafana
