@@ -19,7 +19,8 @@ RUN mkdir -p /etc/grafana/provisioning/datasources && \
     cp $GF_HOME/bin/grafana-server /usr/sbin/grafana-server && \
     cp $GF_HOME/bin/grafana-cli /usr/sbin/grafana-cli && \
     chown -R nobody:nogroup /var/lib/grafana && \
-    chown -R nobody:nogroup $GF_HOME
+    chown -R nobody:nogroup $GF_HOME && \
+    chown -R nobody:nogroup /var/log/grafana
 
 VOLUME ["/var/lib/grafana"]
 
