@@ -56,7 +56,8 @@ docker run \
 ```
 
 Note: An unnamed volume will be created for you when you boot Grafana,
-using `docker volume create grafana-storage` just makes it easer to find.
+using `docker volume create grafana-storage` just makes it easier to find
+by giving it a name.
 
 ## Installing plugins for Grafana 3
 
