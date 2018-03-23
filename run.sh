@@ -24,7 +24,6 @@ if [ ! -r "$GF_PATHS_HOME" ]; then
     PERMISSIONS_OK=1
 fi
 
-
 if [ $PERMISSIONS_OK -eq 1 ]; then
     echo "You may have issues with file permissions, more information here: http://docs.grafana.org/installation/docker/#migration-from-a-previous-version-of-the-docker-container-to-5-1-or-later"
 fi
