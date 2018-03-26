@@ -40,8 +40,6 @@ RUN if [ ! -z "${GF_INSTALL_PLUGINS}" ]; then \
       done; \
     fi
 
-VOLUME [$GF_PATHS_DATA]
-
 EXPOSE 3000
 
 COPY ./run.sh /run.sh
