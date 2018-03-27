@@ -13,7 +13,7 @@ ENV PATH=/usr/share/grafana/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bi
     GF_PATHS_PROVISIONING="/etc/grafana/provisioning"
 
 RUN apt-get update && apt-get install -qq -y tar sqlite libfontconfig curl ca-certificates && \
-    mkdir -p "$GF_PATHS_HOME" && \
+    mkdir -p "$GF_PATHS_HOME/.aws" && \
     curl https://s3-us-west-2.amazonaws.com/grafana-releases/release/grafana-$GRAFANA_VERSION.linux-x64.tar.gz | tar xfvz - --strip-components=1 -C "$GF_PATHS_HOME" && \
     apt-get autoremove -y && \
     rm -rf /var/lib/apt/lists/* && \
@@ -21,24 +21,14 @@ RUN apt-get update && apt-get install -qq -y tar sqlite libfontconfig curl ca-ce
     useradd -r -u $GF_UID -g grafana grafana && \
     mkdir -p "$GF_PATHS_PROVISIONING/datasources" \
              "$GF_PATHS_PROVISIONING/dashboards" \
-             "$GF_PATHS_PLUGINS" \
-             "$GF_PATHS_LOGS" && \
+             "$GF_PATHS_LOGS" \
+             "$GF_PATHS_DATA" && \
     cp "$GF_PATHS_HOME/conf/sample.ini" "$GF_PATHS_CONFIG" && \
     cp "$GF_PATHS_HOME/conf/ldap.toml" /etc/grafana/ldap.toml && \
     chown -R grafana:grafana "$GF_PATHS_DATA" && \
-    chown -R grafana:grafana "$GF_PATHS_HOME" && \
-    chown -R grafana:grafana "$GF_PATHS_LOGS"
-
-ARG GF_INSTALL_PLUGINS=""
-
-RUN if [ ! -z "${GF_INSTALL_PLUGINS}" ]; then \
-      OLDIFS=$IFS; \
-      IFS=','; \
-      for plugin in ${GF_INSTALL_PLUGINS}; do \
-        IFS=$OLDIFS; \
-        grafana-cli --pluginsDir "$GF_PATHS_PLUGINS" plugins install ${plugin}; \
-      done; \
-    fi
+    chown -R grafana:grafana "$GF_PATHS_HOME/.aws" && \
+    chown -R grafana:grafana "$GF_PATHS_LOGS" && \
+    chmod 777 "$GF_PATHS_DATA" "$GF_PATHS_HOME/.aws" "$GF_PATHS_LOGS"
 
 EXPOSE 3000
 
