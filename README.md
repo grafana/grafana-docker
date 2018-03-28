@@ -29,10 +29,10 @@ For example:
 ```
 docker run \
   -d \
-  -p 3000:3000 \
-  --name=grafana \
   -e "GF_SERVER_ROOT_URL=http://grafana.server.name" \
   -e "GF_SECURITY_ADMIN_PASSWORD=secret" \
+  -p 3000:3000 \
+  --name=grafana \
   grafana/grafana
 ```
 
@@ -62,9 +62,9 @@ Pass the plugins you want installed to docker with the `GF_INSTALL_PLUGINS` envi
 ```
 docker run \
   -d \
+  -e "GF_INSTALL_PLUGINS=grafana-clock-panel,grafana-simple-json-datasource" \
   -p 3000:3000 \
   --name=grafana \
-  -e "GF_INSTALL_PLUGINS=grafana-clock-panel,grafana-simple-json-datasource" \
   grafana/grafana
 ```
 
@@ -106,12 +106,12 @@ docker run \
 ```
 docker run \
   -d \
-  -p 3000:3000 \
-  --name=grafana \
   -e "GF_AWS_PROFILES=default" \
   -e "GF_AWS_default_ACCESS_KEY_ID=YOUR_ACCESS_KEY" \
   -e "GF_AWS_default_SECRET_ACCESS_KEY=YOUR_SECRET_KEY" \
   -e "GF_AWS_default_REGION=us-east-1" \
+  -p 3000:3000 \
+  --name=grafana \
   grafana/grafana
 ```
 
