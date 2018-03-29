@@ -2,7 +2,7 @@
 
 [![CircleCI](https://circleci.com/gh/grafana/grafana-docker.svg?style=svg)](https://circleci.com/gh/grafana/grafana-docker)
 
-This project builds a Docker image with the latest master build of Grafana.
+This project builds a Docker image for Grafana.
 
 ## Running your Grafana container
 
@@ -14,7 +14,7 @@ docker run -d --name=grafana -p 3000:3000 grafana/grafana
 
 Try it out, default admin user is admin/admin.
 
-In case port 3000 is closed for external clients or you there is no access 
+In case port 3000 is closed for external clients or there is no access
 to the browser - you may test it by issuing:
   curl -i localhost:3000/login
 Make sure that you are getting "...200 OK" in response.
@@ -59,7 +59,7 @@ Note: An unnamed volume will be created for you when you boot Grafana,
 using `docker volume create grafana-storage` just makes it easier to find
 by giving it a name.
 
-## Installing plugins for Grafana 3
+## Installing plugins for Grafana
 
 Pass the plugins you want installed to docker with the `GF_INSTALL_PLUGINS` environment variable as a comma seperated list. This will pass each plugin name to `grafana-cli plugins install ${plugin}`.
 
@@ -74,27 +74,19 @@ docker run \
 
 ## Building a custom Grafana image with pre-installed plugins
 
-Dockerfile:
-```Dockerfile
-FROM grafana/grafana:master
-ENV GF_PATHS_PLUGINS=/opt/grafana-plugins
-USER root
-RUN mkdir -p $GF_PATHS_PLUGINS && chown nobody:nogroup $GF_PATHS_PLUGINS
-USER nobody
-RUN grafana-cli --pluginsDir $GF_PATHS_PLUGINS plugins install grafana-clock-panel && \
-    grafana-cli --pluginsDir $GF_PATHS_PLUGINS plugins install grafana-simple-json-datasource
-```
-
-Add lines with `grafana-cli ...` for each plugin you wish to install in your custom image. Don't forget to specify what version of Grafana you wish to build from (replace master in the example).
+The `custom/` folder includes a `Dockerfile` that can be used to build a custom Grafana image.  It accepts `GRAFANA_VERSION` and `GF_INSTALL_PLUGINS` as build arguments.
 
 Example of how to build and run:
 ```bash
-docker build -t grafana:master-with-plugins . 
+cd custom
+docker build -t grafana:latest-with-plugins \
+  --build-arg "GRAFANA_VERSION=latest" \
+  --build-arg "GF_INSTALL_PLUGINS=grafana-clock-panel,grafana-simple-json-datasource" .
 docker run \
   -d \
   -p 3000:3000 \
   --name=grafana \
-  grafana:master-with-plugins
+  grafana:latest-with-plugins
 ```
 
 ## Running specific version of Grafana
@@ -132,6 +124,9 @@ Supported variables:
 - `GF_AWS_${profile}_REGION`: AWS region (optional).
 
 ## Changelog
+
+### v5.1.0
+* Complete overhaul
 
 ### v4.2.0
 * Plugins are now installed into ${GF_PATHS_PLUGINS}
