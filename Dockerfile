@@ -1,4 +1,4 @@
-FROM debian:jessie
+FROM debian:stretch
 
 ARG DOWNLOAD_URL=https://s3-us-west-2.amazonaws.com/grafana-releases/release/grafana_5.0.4_amd64.deb 
 
