@@ -25,7 +25,6 @@ if [ ! -d "$GF_PATHS_PLUGINS" ]; then
     mkdir "$GF_PATHS_PLUGINS"
 fi
 
-
 if [ ! -z ${GF_AWS_PROFILES+x} ]; then
     > "$GF_PATHS_HOME/.aws/credentials"
 
@@ -46,6 +45,8 @@ if [ ! -z ${GF_AWS_PROFILES+x} ]; then
 
     chmod 600 "$GF_PATHS_HOME/.aws/credentials"
 fi
+
+export HOME="$GF_PATHS_HOME"
 
 if [ ! -z "${GF_INSTALL_PLUGINS}" ]; then
   OLDIFS=$IFS
