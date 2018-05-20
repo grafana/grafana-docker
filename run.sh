@@ -46,6 +46,26 @@ if [ ! -z ${GF_AWS_PROFILES+x} ]; then
     chmod 600 "$GF_PATHS_HOME/.aws/credentials"
 fi
 
+# Convert all grafana variables which names ends with _FILE into the content of
+# the file that they point at and using the name without the trailing _FILE.
+# This can be used to carry in Docker secrets.
+for VAR in $(env); do
+    if [ -n "$(echo $VAR | grep -E '^GF_' | grep -E '_FILE=')" ]; then
+        VAR_NAME_FILE=$(echo "$VAR" | sed -r "s/([^=]*)=.*/\1/g")
+        VAR_NAME=$(echo "$VAR_NAME_FILE" | sed -r "s/(.*)_FILE$/\1/g")
+        if [ "${!VAR_NAME}" ] && [ "${!VAR_NAME_FILE}" ]; then
+            echo >&2 "ERROR: Both $VAR_NAME and $VAR_NAME_FILE are set (but are exclusive)"
+            exit 1
+        fi
+        if [ "${!VAR_NAME_FILE}" ]; then
+            echo "Getting secret $VAR_NAME from ${!VAR_NAME_FILE}"
+            VAL="$(< "${!VAR_NAME_FILE}")"
+            export "$VAR_NAME"="$VAL"
+            unset "$VAR_NAME_FILE"
+        fi
+    fi
+done
+
 export HOME="$GF_PATHS_HOME"
 
 if [ ! -z "${GF_INSTALL_PLUGINS}" ]; then
