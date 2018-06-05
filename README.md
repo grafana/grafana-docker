@@ -18,6 +18,9 @@ Further documentation can be found at http://docs.grafana.org/installation/docke
 
 ## Changelog
 
+### v5.2.0-beta1
+* Support for Docker Secrets
+
 ### v5.1.0
 * Major restructuring of the container
 * Usage of `chown` removed
