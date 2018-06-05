@@ -1,6 +1,6 @@
 FROM debian:stretch-slim
 
-ARG GRAFANA_URL="https://s3-us-west-2.amazonaws.com/grafana-releases/master/grafana-latest.linux-x64.tar.gz"
+ARG GRAFANA_URL
 ARG GF_UID="472"
 ARG GF_GID="472"
 
