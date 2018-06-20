@@ -18,6 +18,9 @@ Further documentation can be found at http://docs.grafana.org/installation/docke
 
 ## Changelog
 
+### v5.2.0-beta2
+* Fix: config keys ending with _FILE are not respected [#170](https://github.com/grafana/grafana-docker/issues/170)
+
 ### v5.2.0-beta1
 * Support for Docker Secrets
 
