@@ -16,6 +16,23 @@ Try it out, default admin user is admin/admin.
 
 Further documentation can be found at http://docs.grafana.org/installation/docker/
 
+## Build multiarch docker image for arm64v8 and amd64
+```
+docker build -f Dockerfile.arm64v8 -t grafana/grafana:arm64v8 .
+docker push grafana/grafana:arm64v8
+
+docker build -f Dockerfile -t grafana/grafana:amd64 .
+docker push grafana/grafana:amd64
+
+docker manifest create grafana/grafana:latest grafana/grafana:arm64v8 grafana/grafana:amd64
+docker manifest push grafana/grafana:latest
+```
+
+Now docker will pull correct arch automatically:
+```
+docker run -d --name=grafana -p 3000:3000 grafana/grafana
+```
+
 ## Changelog
 
 ### v5.1.5, v5.2.0-beta2
