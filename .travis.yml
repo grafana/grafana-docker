@@ -18,7 +18,7 @@ env:
 
         - BUILD_FROM=amd64/debian:stretch-slim QEMU_ARCH=x86_64 URL_ARCH=amd64 OS_ARCH=slim-amd64
         - BUILD_FROM=arm32v7/debian:stretch-slim QEMU_ARCH=arm URL_ARCH=armv7 OS_ARCH=slim-arm32v7
-        - BUILD_FROM=arm64/debian:stretch-slim QEMU_ARCH=aarch64 URL_ARCH=arm64 OS_ARCH=slim-arm64v8
+        - BUILD_FROM=arm64v8/debian:stretch-slim QEMU_ARCH=aarch64 URL_ARCH=arm64 OS_ARCH=slim-arm64v8
 
 before_install:
   - ./.docker/docker.sh prepare
