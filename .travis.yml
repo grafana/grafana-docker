@@ -11,11 +11,6 @@ env:
         - TARGET=raymondmm/grafana
         - QEMU_VERSION=v2.12.0
     matrix:
-      # url amd64: https://s3-us-west-2.amazonaws.com/grafana-releases/release/grafana-5.2.0.linux-amd64.tar.gz
-      # url armv7: https://s3-us-west-2.amazonaws.com/grafana-releases/release/grafana-5.2.0.linux-armv7.tar.gz
-      # url arm64: https://s3-us-west-2.amazonaws.com/grafana-releases/release/grafana-5.2.0.linux-arm64.tar.gz
-      # url generic: https://s3-us-west-2.amazonaws.com/grafana-releases/release/grafana-${BUILD_VERSION}.linux-${URL_ARCH}.tar.gz
-
         - BUILD_FROM=amd64/debian:stretch-slim QEMU_ARCH=x86_64 URL_ARCH=amd64 OS_ARCH=slim-amd64
         - BUILD_FROM=arm32v7/debian:stretch-slim QEMU_ARCH=arm URL_ARCH=armv7 OS_ARCH=slim-arm32v7
         - BUILD_FROM=arm64v8/debian:stretch-slim QEMU_ARCH=aarch64 URL_ARCH=arm64 OS_ARCH=slim-arm64v8

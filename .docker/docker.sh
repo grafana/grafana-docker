@@ -123,15 +123,15 @@ docker_manifest_list_version_os_arch() {
   # Manifest Push slim-amd64
   docker manifest push ${TARGET}:${BUILD_VERSION}-slim-amd64
 
-  # Manifest Create slim-arm32v6
-  echo "DOCKER MANIFEST: Create and Push docker manifest list - ${TARGET}:${BUILD_VERSION}-slim-arm32v6."
-  docker manifest create ${TARGET}:${BUILD_VERSION}-slim-arm32v6 \
-      ${TARGET}:${BUILD_VERSION}-slim-arm32v6
+  # Manifest Create slim-arm32v7
+  echo "DOCKER MANIFEST: Create and Push docker manifest list - ${TARGET}:${BUILD_VERSION}-slim-arm32v7"
+  docker manifest create ${TARGET}:${BUILD_VERSION}-slim-arm32v7 \
+      ${TARGET}:${BUILD_VERSION}-slim-arm32v7
 
-  # Manifest Annotate slim-arm32v6
+  # Manifest Annotate slim-arm32v7
   docker manifest annotate ${TARGET}:${BUILD_VERSION}-slim-arm32v7 ${TARGET}:${BUILD_VERSION}-slim-arm32v7 --os=linux --arch=arm --variant=v7
 
-  # Manifest Push slim-arm32v6
+  # Manifest Push slim-arm32v7
   docker manifest push ${TARGET}:${BUILD_VERSION}-slim-arm32v7
 
   # Manifest Create slim-arm64v8
