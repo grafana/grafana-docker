@@ -1,0 +1,98 @@
+ARG BUILD_FROM
+FROM ${BUILD_FROM}
+
+# Build arguments
+ARG BUILD_DATE
+ARG BUILD_VERSION
+ARG BUILD_REF
+ARG QEMU_ARCH
+ARG URL_ARCH
+ARG GF_UID="472"
+ARG GF_GID="472"
+
+# Basic build-time metadata as defined at http://label-schema.org
+LABEL org.label-schema.build-date=${BUILD_DATE} \
+    org.label-schema.docker.dockerfile=".docker/Dockerfile.debian-tmpl" \
+    org.label-schema.license="GNU" \
+    org.label-schema.name="Grafana" \
+    org.label-schema.version=${BUILD_VERSION} \
+    org.label-schema.description="The open platform for beautiful analytics and monitoring" \
+    org.label-schema.url="https://grafana.com" \
+    org.label-schema.vcs-ref=${BUILD_REF} \
+    org.label-schema.vcs-type="Git" \
+    org.label-schema.vcs-url="https://github.com/RaymondMouthaan/grafana-docker" \
+    maintainer="Raymond M Mouthaan <raymondmmouthaan@gmail.com>"
+
+USER root
+COPY tmp/qemu-${QEMU_ARCH}-static /usr/bin/qemu-${QEMU_ARCH}-static
+
+ENV PATH=/usr/share/grafana/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \
+    GF_PATHS_CONFIG="/etc/grafana/grafana.ini" \
+    GF_PATHS_DATA="/var/lib/grafana" \
+    GF_PATHS_HOME="/usr/share/grafana" \
+    GF_PATHS_LOGS="/var/log/grafana" \
+    GF_PATHS_PLUGINS="/var/lib/grafana/plugins" \
+    GF_PATHS_PROVISIONING="/etc/grafana/provisioning"
+
+RUN apt-get update && apt-get install -qq -y tar libfontconfig curl ca-certificates && \
+    mkdir -p "$GF_PATHS_HOME/.aws" && \
+    curl https://s3-us-west-2.amazonaws.com/grafana-releases/release/grafana-${BUILD_VERSION}.linux-${URL_ARCH}.tar.gz | tar xfvz - --strip-components=1 -C "$GF_PATHS_HOME" && \
+    apt-get autoremove -y && \
+    rm -rf /var/lib/apt/lists/* && \
+    groupadd -r -g $GF_GID grafana && \
+    useradd -r -u $GF_UID -g grafana grafana && \
+    mkdir -p "$GF_PATHS_PROVISIONING/datasources" \
+             "$GF_PATHS_PROVISIONING/dashboards" \
+             "$GF_PATHS_LOGS" \
+             "$GF_PATHS_PLUGINS" \
+             "$GF_PATHS_DATA" && \
+    cp "$GF_PATHS_HOME/conf/sample.ini" "$GF_PATHS_CONFIG" && \
+    cp "$GF_PATHS_HOME/conf/ldap.toml" /etc/grafana/ldap.toml && \
+    chown -R grafana:grafana "$GF_PATHS_DATA" "$GF_PATHS_HOME/.aws" "$GF_PATHS_LOGS" "$GF_PATHS_PLUGINS" && \
+    chmod 777 "$GF_PATHS_DATA" "$GF_PATHS_HOME/.aws" "$GF_PATHS_LOGS" "$GF_PATHS_PLUGINS"
+
+EXPOSE 3000
+
+COPY ./run.sh /run.sh
+
+USER grafana
+WORKDIR /
+ENTRYPOINT [ "/run.sh" ]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+WORKDIR /opt/emqttd
+
+# start emqttd and initial environments
+CMD ["/opt/emqttd/start.sh"]
+
+RUN adduser -D -u 1000 emqtt
+
+RUN chgrp -Rf root /opt/emqttd && chmod -Rf g+w /opt/emqttd \
+      && chown -Rf emqtt /opt/emqttd
+
+USER emqtt
+
+VOLUME ["/opt/emqttd/log", "/opt/emqttd/data", "/opt/emqttd/lib", "/opt/emqttd/etc"]
+
+# emqttd will occupy these port:
+# - 1883 port for MQTT
+# - 8883 port for MQTT(SSL)
+# - 8083 for WebSocket/HTTP
+# - 8084 for WSS/HTTPS
+# - 8080 for mgmt API
+# - 18083 for dashboard
+# - 4369 for port mapping
+# - 6000-6999 for distributed node
+EXPOSE 1883 8883 8083 8084 8080 18083 4369 6000-6999
