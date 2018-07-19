@@ -47,7 +47,7 @@ docker_build() {
     echo "DOCKER BUILD: url arch : ${URL_ARCH}."
     echo "DOCKER BUILD: url release : ${URL_RELEASE}."
 
-    docker build --build-arg BUILD_REF=${TRAVIS_COMMIT} --build-arg BUILD_DATE=$(date +"%Y-%m-%dT%H:%M:%SZ") --build-arg BUILD_VERSION=${BUILD_VERSION} --build-arg BUILD_FROM=${BUILD_FROM} --build-arg QEMU_ARCH=${QEMU_ARCH}  --build-arg URL_ARCH=${URL_ARCH} --build-arg=URL_RELEASE=${URL_RELEASE} --file ./.docker/Dockerfile.debian-tmpl --tag ${TARGET}:build-${OS_ARCH} .
+    docker build --build-arg BUILD_REF=${TRAVIS_COMMIT} --build-arg BUILD_DATE=$(date +"%Y-%m-%dT%H:%M:%SZ") --build-arg BUILD_VERSION=${BUILD_VERSION} --build-arg BUILD_FROM=${BUILD_FROM} --build-arg QEMU_ARCH=${QEMU_ARCH}  --build-arg URL_ARCH=${URL_ARCH} --build-arg URL_RELEASE=${URL_RELEASE} --file ./.docker/Dockerfile.debian-tmpl --tag ${TARGET}:build-${OS_ARCH} .
 }
 
 docker_test() {
