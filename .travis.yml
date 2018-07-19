@@ -6,6 +6,11 @@ services:
 language:
   - 'bash'
 
+# blocklist
+branches:
+  except:
+  - master
+  
 env:
     global:
         - TARGET=raymondmm/grafana
@@ -23,7 +28,7 @@ install: true
 
 before_script:
     # Set BUILD_VERSION
-    - if [[ ${TRAVIS_TAG} != *"pre"* ]]; then URL_RELEASE=release; else URL_RELEASE=master; fi
+    - if [[ ${TRAVIS_TAG} == *"pre"* ]]; then URL_RELEASE=master; fi
     - if [ ! -z "${TRAVIS_TAG}" ]; then export BUILD_VERSION=${TRAVIS_TAG:1}; fi
 
 script:
