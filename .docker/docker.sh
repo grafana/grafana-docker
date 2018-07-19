@@ -78,7 +78,10 @@ docker_manifest_list() {
     # Create and push manifest lists, displayed as FIFO
     echo "DOCKER MANIFEST: Create and Push docker manifest lists."
     docker_manifest_list_version
-    docker_manifest_list_latest
+    if [[ ${BUILD_VERSION} != *"pre"* ]]; then
+        echo "DOCKER MANIFEST: Create and Push docker manifest lists latest."
+        docker_manifest_list_latest
+    fi
     docker_manifest_list_version_os_arch
 }
 

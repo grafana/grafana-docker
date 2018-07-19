@@ -10,6 +10,7 @@ env:
     global:
         - TARGET=raymondmm/grafana
         - QEMU_VERSION=v2.12.0
+        - URL_RELEASE=release
     matrix:
         - BUILD_FROM=amd64/debian:stretch-slim QEMU_ARCH=x86_64 URL_ARCH=amd64 OS_ARCH=slim-amd64
         - BUILD_FROM=arm32v7/debian:stretch-slim QEMU_ARCH=arm URL_ARCH=armv7 OS_ARCH=slim-arm32v7
@@ -22,7 +23,8 @@ install: true
 
 before_script:
     # Set BUILD_VERSION
-    - if [ ! -z "${TRAVIS_TAG}" ]; then export BUILD_VERSION=${TRAVIS_TAG:1}; else export BUILD_VERSION=5.2.0; fi
+    - if [[ ${TRAVIS_TAG} != *"pre"* ]]; then URL_RELEASE=master; else export URL_RELEASE=release; fi
+    - if [ ! -z "${TRAVIS_TAG}" ]; then export BUILD_VERSION=${TRAVIS_TAG:1}; fi
 
 script:
     # Build Docker image
