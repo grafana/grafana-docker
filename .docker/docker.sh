@@ -40,13 +40,14 @@ docker_prepare() {
 docker_build() {
     # Build Docker image
     echo "DOCKER BUILD: Build Docker image."
-    echo "DOCKER BUILD: build version - ${BUILD_VERSION}."
-    echo "DOCKER BUILD: build from - ${BUILD_FROM}."
-    echo "DOCKER BUILD: qemu arch - ${QEMU_ARCH}."
-    echo "DOCKER BUILD: os arch - ${OS_ARCH}."
-    echo "DOCKER BUILD: os arch - ${URL_ARCH}."
+    echo "DOCKER BUILD: build version : ${BUILD_VERSION}."
+    echo "DOCKER BUILD: build from : ${BUILD_FROM}."
+    echo "DOCKER BUILD: qemu arch : ${QEMU_ARCH}."
+    echo "DOCKER BUILD: os arch : ${OS_ARCH}."
+    echo "DOCKER BUILD: url arch : ${URL_ARCH}."
+    echo "DOCKER BUILD: url release : ${URL_RELEASE}."
 
-    docker build --build-arg BUILD_REF=${TRAVIS_COMMIT} --build-arg BUILD_DATE=$(date +"%Y-%m-%dT%H:%M:%SZ") --build-arg BUILD_VERSION=${BUILD_VERSION} --build-arg BUILD_FROM=${BUILD_FROM} --build-arg QEMU_ARCH=${QEMU_ARCH}  --build-arg URL_ARCH=${URL_ARCH} --file ./.docker/Dockerfile.debian-tmpl --tag ${TARGET}:build-${OS_ARCH} .
+    docker build --build-arg BUILD_REF=${TRAVIS_COMMIT} --build-arg BUILD_DATE=$(date +"%Y-%m-%dT%H:%M:%SZ") --build-arg BUILD_VERSION=${BUILD_VERSION} --build-arg BUILD_FROM=${BUILD_FROM} --build-arg QEMU_ARCH=${QEMU_ARCH}  --build-arg URL_ARCH=${URL_ARCH} --build-arg=${URL_RELEASE} --file ./.docker/Dockerfile.debian-tmpl --tag ${TARGET}:build-${OS_ARCH} .
 }
 
 docker_test() {
