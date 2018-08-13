@@ -8,5 +8,3 @@ This means:
 - the build lives [here](https://github.com/grafana/grafana/tree/master/packaging/docker), under `packaging/docker`
 
 We'd like to thank everyone who has helped out in creating our Docker image and look forward to keep working with you in its new home.
-
-
