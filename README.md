@@ -1,4 +1,4 @@
-# Grafana Docker image
+# The Grafana Docker image has moved
 
 The build for the Grafana docker image has been moved into the main repository.
 
