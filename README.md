@@ -1,6 +1,6 @@
 # The Grafana Docker image has moved
 
-The build for the Grafana docker image has been moved into the main repository. This was done to simplify the build process and to tie a specific version of the docker image with a specific version of Grafana.
+The build for the Grafana docker image has been moved into the main repository. This was done to simplify the build process and to tie a specific version of the docker image to a specific version of Grafana.
 
 This means:
 - we are in the process of moving PR's and issues into the main [repo](https://github.com/grafana/grafana)
