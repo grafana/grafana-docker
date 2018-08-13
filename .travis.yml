@@ -1,0 +1,72 @@
+sudo: 'required'
+
+services:
+  - 'docker'
+
+language:
+  - 'bash'
+
+# blocklist
+branches:
+  except:
+  - master
+  
+env:
+    global:
+        - TARGET=raymondmm/grafana
+        - QEMU_VERSION=v2.12.0
+        - URL_RELEASE=release
+    matrix:
+        - BUILD_FROM=amd64/debian:stretch-slim QEMU_ARCH=x86_64 URL_ARCH=amd64 OS_ARCH=slim-amd64
+        - BUILD_FROM=arm32v7/debian:stretch-slim QEMU_ARCH=arm URL_ARCH=armv7 OS_ARCH=slim-arm32v7
+        - BUILD_FROM=arm64v8/debian:stretch-slim QEMU_ARCH=aarch64 URL_ARCH=arm64 OS_ARCH=slim-arm64v8
+
+before_install:
+  - ./.docker/docker.sh prepare
+
+install: true
+
+before_script:
+    # Set BUILD_VERSION
+    - if [[ ${TRAVIS_TAG} == *"pre"* ]]; then URL_RELEASE=master; fi
+    - if [ ! -z "${TRAVIS_TAG}" ]; then export BUILD_VERSION=${TRAVIS_TAG:1}; fi
+
+script:
+    # Build Docker image
+    - ./.docker/docker.sh build
+
+    # Test Docker image
+    - ./.docker/docker.sh test
+
+    # Push Docker image (TODO move to function)
+    - >
+      if [ ! -z "${TRAVIS_TAG}" ]; then
+        # Tag Docker image
+        ./.docker/docker.sh tag
+
+        # Docker Login
+        echo "${DOCKER_PASSWORD}" | docker login -u "${DOCKER_USERNAME}" --password-stdin
+        # Push Docker image
+        docker push ${TARGET}:${BUILD_VERSION}-${OS_ARCH}
+        # Docker Logout
+        docker logout
+      fi
+jobs:
+    include:
+        - stage: manifest
+          if: tag =~ ^v
+          script:
+              # Create and push Docker manifest lists (TODO move to function)
+              # Docker Login
+              - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+
+              # Create and Push Docker Manifest Lists to Docker Hub
+              - echo "Create manifest list for all docker images."
+              - ./.docker/docker.sh manifest-list
+
+              # Docker Logout
+              - docker logout
+
+# notify me when things fail
+notifications:
+    email: true
