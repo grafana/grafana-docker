@@ -3,7 +3,8 @@
 The build for the Grafana docker image has been moved into the main repository. This was done to simplify the build process and to tie a specific version of the docker image to a specific version of Grafana.
 
 This means:
-- we are in the process of moving PR's and issues into the main [repo](https://github.com/grafana/grafana)
+- the open PR's and issues were closed and re-created in the main [repo](https://github.com/grafana/grafana)
+  - [docker issues](https://github.com/grafana/grafana/issues?q=is%3Aopen+is%3Aissue+label%3A%22comp%3A+docker%22)
 - any new issues or PR's should be created [here](https://github.com/grafana/grafana/issues)
 - the build lives [here](https://github.com/grafana/grafana/tree/master/packaging/docker), under `packaging/docker`
 
